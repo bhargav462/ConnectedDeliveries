@@ -37,13 +37,14 @@ body{
 	transition : all 0.3s ease-out;
 }
 .navigation-wrap{
-	position: fixed;
+    position: sticky;
+    position: -webkit-sticky;
 	width: 100%;
-	top: 65px;
 	left: 0;
 	z-index: 1000;
 	-webkit-transition : all 0.3s ease-out;
-	transition : all 0.3s ease-out;
+    transition : all 0.3s ease-out;
+    margin-top: 5px;
 }
 .navbar{
 	padding: 0;
@@ -192,7 +193,7 @@ body{
 }
 
 body.dark .menuBar{
-	color: #fff;
+    color: #fff;
 	/* background-color: #fcfcfc; */
 }
 
@@ -281,5 +282,42 @@ body.dark .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
 	body.dark .dropdown-menu {
 		background-color: transparent;
 		box-shadow: none;
-	}
+    }
+    .navigation-wrap{
+        margin-top:-10px;
+    }
+}
+
+/* data */
+
+#regLog{
+    text-align: center;
+    margin-top: 10px;
+}
+#heading{
+  margin-top: 10px;
+    text-align: center;
+     font-size: 30px;
+}
+
+@media (max-width: 767px) {
+  
+ #regLog{
+  padding-bottom: 15px;
+  margin-top: 0px;
+ } 
+ .navigation-wrap{
+     top:110px;
+     margin-top: -10px;
+ }
+ #heading{
+     font-size: 30px;
+ }
+
+}
+
+@media (max-width: 320px) {
+  #heading{
+      font-size: 25px;
+  }
 }
