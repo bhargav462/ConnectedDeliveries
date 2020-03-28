@@ -7,7 +7,11 @@
   <link rel='stylesheet' href='/styles/utils/bootstrap.css'>
   <link rel="stylesheet" href="/styles/utils/googleFonts.css">
   <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/utils/gijgo.css" type="text/css" />
   <style>
+      #timepicker{
+          color: black;
+      }
       body{
           
       }
@@ -126,10 +130,17 @@ legend
                 </div>
             </div>
 
+            <div class="form-group row">
+                <label for="dates" class="col-sm-2 col-form-label">Time</label>
+                <div class="col-sm-4">
+                 <input class="form-control"  id="timepicker"/>
+                </div>
+            </div>
+
         <div class="form-group row">
                 <label for="dates" class="col-sm-2 col-form-label">Charge</label>
                 <div class="col-sm-4">
-        <input class="form-control" type="text" placeholder="40" readonly>
+                  <input class="form-control" type="text" placeholder="40" readonly>
                 </div>
             </div>
 
@@ -140,7 +151,7 @@ legend
         </div>
 
      </fieldset>
-
+    
    
 </form>
 </div>
@@ -149,8 +160,15 @@ legend
 
 
 </body>
+  <script src="/javascript/utils/jquery3.js"></script>
+      <script src="/javascript/utils/gijgo.js" type="text/javascript"></script>
+<script>
+        $('#timepicker').timepicker({
+            uiLibrary: 'bootstrap4',
+            format:"HH:mm a"
+        });
+    </script>
 
-<script src="/javascript/utils/jquery.js"></script>
 <script src='/javascript/utils/bootstrap.js'></script>
 
 </html>
