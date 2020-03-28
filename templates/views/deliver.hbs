@@ -7,15 +7,132 @@
   <link rel='stylesheet' href='./styles/utils/bootstrap.css'>
   <link rel="stylesheet" href="./styles/utils/googleFonts.css">
   <link rel="stylesheet" href="./styles/header.css">
+
+  <style>
+      body{
+          
+      }
+      #outerBody{
+          background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
+          height: 100%;
+          background-repeat: no-repeat;
+          background-size: cover;   
+      }
+      #mainBody{
+          padding:20px;
+          padding-top : 30px;
+      }
+      #submitButton{
+          text-align: center;
+          margin-right: auto;
+          margin-left: auto;
+          display: block;
+      }
+        
+fieldset
+{
+  /*background-color:#4d4dff;
+  max-width:500px;*/
+  color: white;
+  padding:16px;
+  border: none;	
+}
+legend
+{
+  color: black; 
+}
+
+@media (min-width:650px) {
+  #mainBody{
+      height: 520px;
+  }
+}
+
+@media (min-width:767px){
+  #mainBody{
+      padding-left: 20%;
+  }
+}
+
+  </style>
 </head>
 
 <body class="dark">	
   
 {{>header}}
 
-<div id="mainBody">
- DEliver Page
+<div id="outerBody">
+  <div id="mainBody">
+    
+  <form>
+
+        <fieldset>
+
+            <legend>Deliver</legend>
+
+            <div class="form-group row">
+                <label for="Location" class="col-sm-2 col-form-label">Select your location</label>
+                <div class="col-md-4">
+                <select class="form-control">
+                    <option>Jalandhar</option>
+                </select>    
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="From" class="col-sm-2 col-form-label">From</label>
+                <div class="col-md-4">
+                <select class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>    
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="To" class="col-sm-2 col-form-label">To</label>
+                <div class="col-md-4">
+                <select class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                </select>    
+                </div>
+            </div>
+
+        
+
+<div class="form-group row">
+                <label for="dates" class="col-sm-2 col-form-label">Date</label>
+                <div class="col-sm-4">
+                <input class="form-control" type="date" name="dates" required>
+                </div>
+            </div>
+             
+
+
+        <div class="form-group row">
+                <label for="dates" class="col-sm-2 col-form-label">Charge</label>
+                <div class="col-sm-4">
+        <input class="form-control" type="text" placeholder="40" readonly>
+                </div>
+            </div>
+
+        <div class="form-group row">
+            <div class="col-sm-6">
+            <button id="submitButton" type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+
+     </fieldset>
+
+   
+</form>
 </div>
+
+</div>
+
 
 
 </body>
