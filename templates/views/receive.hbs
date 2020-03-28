@@ -7,7 +7,7 @@
   <link rel='stylesheet' href='/styles/utils/bootstrap.css'>
   <link rel="stylesheet" href="/styles/utils/googleFonts.css">
   <link rel="stylesheet" href="/styles/header.css">
-    <link rel="stylesheet" href="/styles/utils/gijgo.css" type="text/css" />
+    <link rel="stylesheet" href="/styles/utils/bootstrap-clockpicker.css">
   <style>
       #timepicker{
           color: black;
@@ -130,12 +130,24 @@ legend
                 </div>
             </div>
 
-            <div class="form-group row">
+             <div class="form-group row">
+                <label for="dates" class="col-sm-2 col-form-label">Time</label>
+                <div class="col-sm-4">
+                  <div class="input-group clockpicker">
+		     <input type="text" class="form-control" value="09:30">
+		     <span class="input-group-addon">
+			   <span class="glyphicon glyphicon-time"></span>
+		     </span>
+	        </div>
+                </div>
+            </div>
+
+            {{!-- <div class="form-group row">
                 <label for="dates" class="col-sm-2 col-form-label">Time</label>
                 <div class="col-sm-4">
                  <input class="form-control"  id="timepicker"/>
                 </div>
-            </div>
+            </div> --}}
 
         <div class="form-group row">
                 <label for="dates" class="col-sm-2 col-form-label">Charge</label>
@@ -160,15 +172,14 @@ legend
 
 
 </body>
-  <script src="/javascript/utils/jquery3.js"></script>
-      <script src="/javascript/utils/gijgo.js" type="text/javascript"></script>
+<script src="/javascript/utils/jquery3.js"></script>
+      <script src="/javascript/utils/bootstrap-clockpicker.js"></script>
+      <script src='/javascript/utils/bootstrap.js'></script>
 <script>
-        $('#timepicker').timepicker({
-            uiLibrary: 'bootstrap4',
-            format:"HH:mm a"
-        });
-    </script>
+        $('.clockpicker').clockpicker({
+		donetext: 'Done'
 
-<script src='/javascript/utils/bootstrap.js'></script>
+	});
+    </script>
 
 </html>
