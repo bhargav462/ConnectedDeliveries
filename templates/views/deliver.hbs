@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connected Deliveries</title>
+      <link rel="icon" href="images/circle-cropped.png" type="image/icon type">
   <link rel='stylesheet' href='/styles/utils/bootstrap.css'>
   <link rel="stylesheet" href="/styles/utils/googleFonts.css">
   <link rel="stylesheet" href="/styles/header.css">
@@ -101,7 +102,7 @@ legend
 <div class="form-group row">
                 <label for="dates" class="col-sm-2 col-form-label">Date</label>
                 <div class="col-sm-4">
-                <input class="form-control" type="date" name="dates" required>
+                <input id="dates" class="form-control" type="date" name="dates" required>
                 </div>
             </div>
 
@@ -160,6 +161,31 @@ legend
 		donetext: 'Done'
 
 	});
+
+    var date = new Date();
+
+    document.getElementById("dates").min = fullDate(date);
+  
+
+    function fullDate(date)
+  {
+    var minDate = date.getFullYear() + '-';
+      var temp;
+      if(date.getMonth() + 1 < 9)
+      {
+        temp = date.getMonth() + 1;
+        minDate += "0" + temp + "-";
+      }else{
+        minDate += temp + "-";
+      }
+      if(date.getDate() + 1 < 9)
+      {
+        minDate += "0" + date.getDate();
+      }else{
+        minDate += date.getDate();
+      }
+     return minDate;
+  }
     </script>
 
 </html>
