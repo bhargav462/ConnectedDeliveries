@@ -44,7 +44,7 @@
                                                     </div>
                                 </li>
                                 <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="notif">
-                                                    <a class="nav-link" href="/">Notifications</a>
+                                                    <a class="nav-link" href="#">Notifications</a>
                                 </li>
                                 <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="history">
                                                     <a class="nav-link" href="#">History</a>
@@ -62,3 +62,13 @@
     </div>
  </div>
 </header>
+
+<script>
+  var menuBar = document.querySelectorAll("#navbarSupportedContent>ul>li");
+
+  menuBar.forEach(function(element){
+    element.className = element.className.slice(0,34);
+    console.log(element.className);
+  })
+
+</script>

@@ -10,9 +10,7 @@
   <link rel="stylesheet" href="/styles/header.css">
     <link rel="stylesheet" href="/styles/utils/bootstrap-clockpicker.css">
   <style>
-      body{
-          
-      }
+      
       #outerBody{
           background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
           height: 100%;
@@ -32,8 +30,6 @@
         
 fieldset
 {
-  /*background-color:#4d4dff;
-  max-width:500px;*/
   color: white;
   padding:16px;
   border: none;	
@@ -153,10 +149,13 @@ legend
 
 </body>
 
-  <script src="/javascript/utils/jquery3.js"></script>
+  <script src="/javascript/utils/jquery.js"></script>
       <script src="/javascript/utils/bootstrap-clockpicker.js"></script>
       <script src='/javascript/utils/bootstrap.js'></script>
 <script>
+
+  document.getElementById("service").className = "nav-item pl-4 pl-md-0 ml-0 ml-md-4 active"
+
         $('.clockpicker').clockpicker({
 		donetext: 'Done'
 

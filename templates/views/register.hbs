@@ -12,6 +12,14 @@
   <link rel="stylesheet" href="/styles/utils/animate.css">
   <link rel="stylesheet" href="/styles/utils/loginUtil.css">
   <link rel="stylesheet" href="/styles/utils/loginMain.css">
+  <style>
+      .container-login100{
+          background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
+          height: 100%;
+          background-repeat: no-repeat;
+          background-size: cover;  
+      }
+  </style>
 </head>
 
 <body class="dark">	
@@ -28,27 +36,53 @@
 						Welcome
 					</span>
 					<span class="login100-form-title p-b-48">
-						<!-- <i class="zmdi zmdi-font"></i> -->
 						<img src="images\circle-cropped.png">
 					</span>
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-						<input class="input100" type="text" name="email" value=" ">
+					<div class="wrap-input100">
+						<input class="input100" type="text" name="name" required>
+						<span class="focus-input100" data-placeholder="Name"></span>
+					</div>
+
+					<div class="wrap-input100 ">
+						<input class="input100" type="email" name="email" required>
 						<span class="focus-input100" data-placeholder="Email"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
+					<div class="wrap-input100 ">
+						<input type="number" class="input100" name="phoneNo"
+    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+    maxlength = "10"
+ />
+						<span class="focus-input100" data-placeholder="Phone No"></span>
+					</div>
+
+					<div class="wrap-input100">
+						<input class="input100" type="text" name="Upi" required>
+						<span class="focus-input100" data-placeholder="UPI ID"></span>
+					</div>
+
+					<div class="wrap-input100" data-validate="Enter password">
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
-						<input class="input100" type="password" name="pass">
+							<input class="input100" type="password" name="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+							title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more" required>
 						<span class="focus-input100" data-placeholder="Password"></span>
+					</div>
+
+					<div class="wrap-input100" data-validate="Enter re-password">
+						<span class="btn-show-pass">
+							<i class="zmdi zmdi-eye"></i>
+						</span>
+							<input class="input100" type="password" name="pass" required>
+						<span class="focus-input100" data-placeholder="Re-type password"></span>
 					</div>
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button type="submit" class="login100-form-btn">
 								Register
 							</button>
 						</div>
@@ -72,6 +106,10 @@
 
 
 </body>
+
+<script>
+
+</script>
 
 <script src="/javascript/utils/jquery.js"></script>
 <script src='/javascript/utils/bootstrap.js'></script>
