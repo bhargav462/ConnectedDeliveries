@@ -1,0 +1,11 @@
+{
+  "production":{
+    "MONGODB_URI" : "mongodb+srv://conDel:delcon@mycluster-ebxbe.mongodb.net/condel?retryWrites=true&w=majority",
+    "JWT_SECRET" : "mhtcsqbfe"
+  },
+  "development":{
+      "PORT":3000,
+      "MONGODB_URI" : "mongodb://127.0.0.1:27017/conDel",
+      "JWT_SECRET" : "mhtcsqbfe"
+  }
+}

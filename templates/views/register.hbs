@@ -40,33 +40,36 @@
 					</span>
 
 					<div class="wrap-input100">
-						<input class="input100" type="text" name="name" required>
+						<input id="name" class="input100" type="text" name="name" required>
 						<span class="focus-input100" data-placeholder="Name"></span>
 					</div>
 
 					<div class="wrap-input100 ">
-						<input class="input100" type="email" name="email" required>
+						<input id="email" class="input100" type="email" name="email" required>
 						<span class="focus-input100" data-placeholder="Email"></span>
 					</div>
+					    <p style="display: none;" id='emailMessage'>Email Already exists</p>
 
 					<div class="wrap-input100 ">
-						<input type="number" class="input100" name="phoneNo"
+						<input id="phoneNo" type="number" class="input100" name="phoneNo"
     oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
     maxlength = "10"
  />
 						<span class="focus-input100" data-placeholder="Phone No"></span>
 					</div>
+					   <p style="display: none;" id="phonenoMessage">phoneNo already exists</p>
 
 					<div class="wrap-input100">
-						<input class="input100" type="text" name="Upi" required>
+						<input id="upiId" class="input100" type="text" name="Upi" required>
 						<span class="focus-input100" data-placeholder="UPI ID"></span>
 					</div>
+					 <p style="display: none;" id="upiMessage">UPI ID already exists</p>
 
 					<div class="wrap-input100" data-validate="Enter password">
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
-							<input class="input100" type="password" name="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+							<input id="password" class="input100" type="password" name="pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
 							title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more" required>
 						<span class="focus-input100" data-placeholder="Password"></span>
 					</div>
@@ -75,14 +78,17 @@
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
-							<input class="input100" type="password" name="pass" required>
+							<input id="retypePassword" class="input100" type="password" name="pass" required>
 						<span class="focus-input100" data-placeholder="Re-type password"></span>
 					</div>
+
+                                            <p id='message'></p>
+
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button type="submit" class="login100-form-btn">
+							<button id="registerButton" type="submit" class="login100-form-btn">
 								Register
 							</button>
 						</div>
@@ -114,5 +120,76 @@
 <script src="/javascript/utils/jquery.js"></script>
 <script src='/javascript/utils/bootstrap.js'></script>
 <script src="/javascript/utils/loginMain.js"></script>
+<script src="/javascript/utils/axios.js"></script>
+<script>
+   $('#password, #retypePassword').on('keyup', function () {
+  if ($('#password').val() == $('#retypePassword').val()) {
+    $('#message').html('Matching').css('color', 'green');
+  } else 
+    $('#message').html('Not Matching').css('color', 'red');
+});
+
+
+    document.addEventListener('submit',function(e){
+	   e.preventDefault();
+
+	 const name = document.getElementById("name").value;
+     const email = document.getElementById("email").value;
+	 const password = document.getElementById("password").value;
+	 const retypePassword = document.getElementById("retypePassword").value;
+	 const phoneNo = document.getElementById("phoneNo").value;
+	 const upiId = document.getElementById("upiId").value;
+
+	 if(password !== retypePassword){
+    $('#message').html('Not Matching').css('color', 'red');
+	 }else{
+			
+			fetch('/register',{
+							method : 'post',
+					headers: {
+			'Content-Type': 'application/json'
+			},
+				body : JSON.stringify({name,email,password,phoneNo,upiId})
+			}).then(function(response) {
+
+				if (response.ok) {
+					return response.json();
+				} 
+					response.json().then(function(text){
+						console.log(text)
+						
+						if(text.error)
+						{
+						   throw new Error(text.error);
+						}
+					}).catch(function(e){
+						console.log(e.message);
+						if(e.message === 'email'){
+                          $('#emailMessage').css('display','').css('color','red');
+						  $('#phonenoMessage').css('display',"none");
+						  $('#upiMessage').css('display',"none");
+						}else if(e.message === 'phoneNo'){
+                          $('#emailMessage').css('display','none');
+						  $('#phonenoMessage').css('display',"").css('color','red');
+						  $('#upiMessage').css('display',"none");
+						}else if(e.message === 'upiId'){
+						  $('#emailMessage').css('display','none');
+						  $('#phonenoMessage').css('display',"none");
+						  $('#upiMessage').css('display',"").css('color','red');
+						}
+					})
+					return 'error';
+				}).then(function(result){
+					console.log('result',result);
+					if(result !== 'error')
+					window.location.href = "/login";
+				}).catch(function(err){
+				console.log('err',err)
+				});
+
+	 }
+})
+
+</script>
 
 </html>
