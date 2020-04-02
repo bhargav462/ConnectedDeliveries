@@ -3,9 +3,14 @@ const path = require('path');
 const hbs = require('hbs');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const auth = require('./middleware/auth')
+
 mongoose.Promise = global.Promise;
 
 const app = express();
+app.use(cookieParser())
+
 const port = process.env.PORT || 3000;
 
 const config = require('./config/config')
@@ -27,7 +32,7 @@ hbs.registerPartials(partialsPath);
 app.use(express.static(publicDirectoryPath))
 app.use(userRoutes)
 
-app.get('/',(req,res) => {
+app.get('/',auth,(req,res) => {
     res.render('index');
 })
 
@@ -39,11 +44,11 @@ app.get('/register',(req,res) => {
     res.render('register');
 })
 
-app.get('/receive',(req,res) => {
+app.get('/receive',auth,(req,res) => {
     res.render('receive');
 })
 
-app.get('/deliver',(req,res) => {
+app.get('/deliver',auth,(req,res) => {
     res.render('deliver');
 })
 
