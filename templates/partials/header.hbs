@@ -43,12 +43,11 @@
                                                         <a class="dropdown-item" href="/receive">Receive</a>
                                                     </div>
                                 </li>
-                                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="notif">
+                                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="noti_Container">
                                                     <a class="nav-link" href="#">
                                                                  
                                               <!-- <li><a href="#">Home</a></li> -->
                                               <!-- <li><a href="#">Find Friends</a></li> -->
-                                              <li id="noti_Container">
                                                   <div id="noti_Counter">8</div>   <!--SHOW NOTIFICATIONS COUNT.-->
                                                   
                                                   <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
@@ -60,7 +59,6 @@
                                                       <div style="height:300px;">oiifownocfbiuowrioobyr tbuiwtioecwgio trtbniryniowy</div>
                                                       <div class="seeAll"><a href="#">See All</a></div>
                                                   </div>
-                                              </li>
                                               <!-- <li><a href="#">Messages</a></li> -->
 
 
@@ -84,6 +82,10 @@
 </header>
 <script src="/javascript/utils/jquery.js"></script>
 <script>
+
+console.log('width',screen.width);
+console.log('height',screen.height)
+
   var menuBar = document.querySelectorAll("#navbarSupportedContent>ul>li");
 
   menuBar.forEach(function(element){
