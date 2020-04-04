@@ -57,9 +57,10 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button id="loginButton" class="login100-form-btn">
 								Login
 							</button>
+							  <div style="display: none;" class="spinner-border text-primary" id="loading"></div>
 						</div>
 					</div>
 
@@ -87,8 +88,14 @@
 <script src="/javascript/utils/loginMain.js"></script>
 
 <script>
+    var loading = document.getElementById("loading")
+	var loginButton = document.getElementById("loginButton");
+
 	document.addEventListener('submit',function(e){
 		e.preventDefault();
+		loading.style.display = "";
+		loginButton.style.display = "none";
+
 		$('#message').css('display','none');
 
 		const email = document.getElementById('email').value;
@@ -101,8 +108,9 @@
 						},
 					body : JSON.stringify({email,password})
 		}).then(function(response){
-			console.log(response)
-			if(response.ok){
+             loading.style.display = "none";
+			 loginButton.style.display = "";
+ 			if(response.ok){
 		
 				response.text().then(function(text){
 					alert('succesfully logged in');
