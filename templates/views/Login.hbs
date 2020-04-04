@@ -57,12 +57,14 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button id="loginButton" class="login100-form-btn">
+							<button id="loginButton" class="login100-form-btn">								
 								Login
 							</button>
-							  <div style="display: none;" class="spinner-border text-primary" id="loading"></div>
+							  <div id="loading" style="display:none;" class="spinner-border text-primary"></div>
 						</div>
 					</div>
+
+					
 
 					<div class="text-center p-t-115">
 						<span class="txt1">
@@ -93,7 +95,7 @@
 
 	document.addEventListener('submit',function(e){
 		e.preventDefault();
-		loading.style.display = "";
+	 	loading.style.display = "block";
 		loginButton.style.display = "none";
 
 		$('#message').css('display','none');
