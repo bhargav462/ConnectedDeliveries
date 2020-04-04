@@ -14,27 +14,56 @@
   
 {{>header}}
 
+<script>
+      document.getElementById("home").className = "nav-item pl-4 pl-md-0 ml-0 ml-md-4 active"
+      
+          fetch('/login/check',{
+      method:'post',
+    }).then(function(response){
+      if(response.ok){
+        var username = document.getElementById("username");
+        var login = document.getElementById("login")
+
+         response.json().then(function(data){
+          if(data.user){
+            username.textContent = data.user;
+            username.href = "/profile";
+            login.textContent = "logout"
+            login.href = "#";
+
+            login.addEventListener("click",function(){
+            fetch('/logout',{
+              method:'post'
+            }).then(function(result){
+              if(!result.ok){
+                throw new Error()
+              }
+              window.location.href = "/login"
+            }).catch(function(err){
+              window.location.href = "/login" 
+            })
+          }); 
+          } 
+           
+        })
+      }else{
+        throw new Error();
+      }
+        
+    }).catch(function(err){
+       window.location.href = "/login";
+    });
+
+</script>
+
+
 <div id="mainBody">
   Home Page
-  <button onclick="check()">Click</button>
 </div>
 
 
 </body>
 
-<script>
-      document.getElementById("home").className = "nav-item pl-4 pl-md-0 ml-0 ml-md-4 active"
-      function check(){
-        fetch('/getCookie',{
-               method : 'post',
-					     headers: {
-			          'Content-Type': 'application/json'
-			         }
-        }).then(function(response){
-          alert('response');
-        })
-      }
-</script>
 
 <script src="./javascript/utils/jquery.js"></script>
 <script src='./javascript/utils/bootstrap.js'></script>

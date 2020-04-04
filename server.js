@@ -16,6 +16,7 @@ const port = process.env.PORT || 3000;
 const config = require('./config/config')
 
 const userRoutes = require('./routes/userRoutes')
+const serviceRoutes = require('./routes/serviceRoutes')
 
 const publicDirectoryPath = path.join(__dirname,'/public');
 const viewsPath = path.join(__dirname,'/templates/views');
@@ -31,6 +32,7 @@ hbs.registerPartials(partialsPath);
 
 app.use(express.static(publicDirectoryPath))
 app.use(userRoutes)
+app.use(serviceRoutes)
 
 app.get('/',auth,(req,res) => {
     res.render('index');

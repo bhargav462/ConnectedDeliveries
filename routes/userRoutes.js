@@ -51,7 +51,7 @@ router.post('/login',async function (req,res) {
                 console.log('user',user);
                 const token = await user.generateAuthToken();
                 console.log(token);
-                res.cookie("token",token,{maxAge: 24*60*60000})
+                res.cookie("token",token,{maxAge: 24*60*60000},{ httpOnly: true })
                 res.send(token);
             }else{
                 res.status(400).send();
@@ -67,8 +67,13 @@ router.post('/login',async function (req,res) {
  router.post('/login/check',auth,async (req,res) => {
         const token =  req.cookies.token
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
-        const user = await User.findOne({_id:decoded_id,'tokens.token':token })
+        const user = await User.findOne({_id:decoded._id,'tokens.token':token },'name')
         
+        if(!user){
+            return res.status(404).send();
+        }
+
+        res.send({'user':user.name});
  })
 
  router.post('/getCookie',(req,res) => {
@@ -78,8 +83,20 @@ router.post('/login',async function (req,res) {
      res.send(req.cookies)
  })
 
- router.post('/logout',(req,res) => {
-     res.clearCookie('token')
+ router.post('/logout',auth,async (req,res) => {
+console.log('logout')
+    try{
+      req.user.tokens = req.user.tokens.filter((token) => {
+          return token.token !== req.token
+      })
+
+      await req.user.save();
+      res.clearCookie('token')
+      res.render('Login');
+    }catch(e){
+      res.status(500).send();
+    }
+
  })
 
 module.exports = router
