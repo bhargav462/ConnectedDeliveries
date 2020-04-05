@@ -43,27 +43,11 @@
                                                         <a class="dropdown-item" href="/receive">Receive</a>
                                                     </div>
                                 </li>
-                                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="noti_Container">
-                                                    <a class="nav-link" href="#">
-                                                                 
-                                              <!-- <li><a href="#">Home</a></li> -->
-                                              <!-- <li><a href="#">Find Friends</a></li> -->
-                                                  <div id="noti_Counter">8</div>   <!--SHOW NOTIFICATIONS COUNT.-->
-                                                  
-                                                  <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
-                                                  <div id="noti_Button"></div>    
-                                  
-                                                  <!--THE NOTIFICAIONS DROPDOWN BOX.-->
-                                                  <div id="notifications">
-                                                      <h3>Notifications</h3>
-                                                      <div style="height:300px;">oiifownocfbiuowrioobyr tbuiwtioecwgio trtbniryniowy</div>
-                                                      <div class="seeAll"><a href="#">See All</a></div>
-                                                  </div>
-                                              <!-- <li><a href="#">Messages</a></li> -->
-
-
-                                                    </a>
+                                <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="notif">
+                                                    <a class="nav-link" href="#">Notifications</a>
                                 </li>
+
+                                
                                 <li class="nav-item pl-4 pl-md-0 ml-0 ml-md-4" id="history">
                                                     <a class="nav-link" href="#">History</a>
                                 </li>
@@ -80,57 +64,12 @@
     </div>
  </div>
 </header>
-<script src="/javascript/utils/jquery.js"></script>
+
 <script>
-
-console.log('width',screen.width);
-console.log('height',screen.height)
-
   var menuBar = document.querySelectorAll("#navbarSupportedContent>ul>li");
 
   menuBar.forEach(function(element){
     element.className = element.className.slice(0,34);
   })
-
-   $(document).ready(function () {
-
-// ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
-$('#noti_Counter')
-    .css({ opacity: 0 })
-    .text('7')  // ADD DYNAMIC VALUE (YOU CAN EXTRACT DATA FROM DATABASE OR XML).
-    .css({ top: '-10px' })
-    .animate({ top: '-2px', opacity: 1 }, 500);
-
-$('#noti_Button').click(function () {
-
-    // TOGGLE (SHOW OR HIDE) NOTIFICATION WINDOW.
-    $('#notifications').fadeToggle('fast', 'linear', function () {
-        if ($('#notifications').is(':hidden')) {
-            $('#noti_Button').css('background-color', '#2E467C');
-        }
-        // CHANGE BACKGROUND COLOR OF THE BUTTON.
-        else $('#noti_Button').css('background-color', '#FFF');
-    });
-
-    $('#noti_Counter').fadeOut('slow');     // HIDE THE COUNTER.
-
-    return false;
-});
-
-// HIDE NOTIFICATIONS WHEN CLICKED ANYWHERE ON THE PAGE.
-$(document).click(function () {
-    $('#notifications').hide();
-
-    // CHECK IF NOTIFICATION COUNTER IS HIDDEN.
-    if ($('#noti_Counter').is(':hidden')) {
-        // CHANGE BACKGROUND COLOR OF THE BUTTON.
-        $('#noti_Button').css('background-color', '#2E467C');
-    }
-});
-
-$('#notifications').click(function () {
-    return false;       // DO NOTHING WHEN CONTAINER IS CLICKED.
-});
-});
 
 </script>

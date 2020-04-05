@@ -38,8 +38,8 @@ app.get('/',auth,(req,res) => {
     res.render('index');
 })
 
-app.get('/login',(req,res) => {
-    res.render('Login');
+app.get('/login',auth,(req,res) => {
+    res.render('index');
 })
 
 app.get('/register',(req,res) => {
