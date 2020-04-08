@@ -26,6 +26,9 @@ const serviceSchema = new Schema({
     },
     charge:{
         type:Number
+    },
+    itemList:{
+        type:Array
     }
 })
 

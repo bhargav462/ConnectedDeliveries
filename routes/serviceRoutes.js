@@ -21,15 +21,16 @@ router.post('/deliver',auth,(req,res) => {
 })
 
 router.post('/receive',auth,(req,res) => {
-    console.log('deliver')
+    console.log('receive',req.body)
     
-    var newService = _.pick(req.body,['location','from','to','date','time','charge'])
+    var newService = _.pick(req.body,['location','from','to','date','time','charge','itemList'])
     newService.userId = req.user._id;
     newService.mode = "receive";
     var service = new Service(newService)
         console.log(service)
 
     service.save().then((result) => {
+        console.log()
         res.send(); 
     }).catch((err) => {
         res.status(403).send()

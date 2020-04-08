@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="/styles/utils/googleFonts.css">
   <link rel="stylesheet" href="/styles/header.css">
   <link rel="stylesheet" href="/styles/utils/bootstrap-clockpicker.css">
+  {{!-- <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"> --}}
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+  {{!-- <link rel="stylesheet" href="/styles/add.css"> --}}
   <style>
       #timepicker{
           color: black;
@@ -30,6 +33,34 @@
           margin-left: auto;
           display: block;
       }
+
+#itemCharge{
+   border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+    padding: 7px 10px;
+    width: 230px;
+
+}
+
+#add-task{
+  color: #fff;
+    box-sizing: border-box;
+    font-size: 1.25em;
+    background: #00b934;
+    border-left: 1px solid #098009;
+}
+
+#add-task:hover{
+      background: #5cb85c;
+}
+
+#tasker ul li{
+  margin-left: -40px;
+  color: #098009 ;
+}
+
+
         
 fieldset
 {
@@ -53,8 +84,11 @@ legend
 </head>
 
 <body class="dark">	
-  
+  <nav>
 {{>header}}
+
+  </nav>
+    
 
 <script>
       document.getElementById("service").className = "nav-item pl-4 pl-md-0 ml-0 ml-md-4 active"
@@ -163,29 +197,60 @@ legend
                 </div>
             </div>
 
-        <div class="form-group row">
+           <div class="form-group row">
                 <label for="charge" class="col-sm-2 col-form-label">Charge</label>
                 <div class="col-sm-4 col-sm-offset-4">
                   <input id="charge" class="form-control" type="text" placeholder="40" value="40" readonly>
                 </div>
             </div>
 
-            <div class="form-group row">
+            {{!-- <div class="form-group row">
                 <label for="items" class="col-sm-2 col-form-label">Items</label>
                 <div class="col-sm-4 col-sm-offset-4">
                   <textarea id="items" class="form-control" type="text" placeholder="Enter your requirements" value="40" required></textarea>
                 </div>
-            </div>
+            </div> --}}
+
+            <p id="itemMessage" style="display: none;color:red;">Please enter Item details and the Qty</p>
 
             <div class="form-group row">
                 <label for="item" class="col-sm-2 col-form-label">Items</label>
-                <div class="col-sm-4">
-                    <input id="item" class="form-control" type="text" name="dates" placeholder="Item Description">
-                </div><br><br>
-                <div class="col-sm-4">
-                    <input id="item" class="form-control" type="number" name="dates" placeholder="No of items">
-                </div>
-            </div> 
+                    <div class="col-sm-4">
+                        <input id="item" class="form-control" type="text" placeholder="Item Description">
+                    </div><br><br>
+
+                    <div class="form-group row input-group mb-3 col-sm-3" style="margin-left: 1px;">
+	                    <div class="input-group-prepend">
+	                      <label class="input-group-text" for="inputGroupSelect01">Qty</label>
+	                    </div>
+                        <input id="count" class="form-control" type="number">
+                        <button id="add-task"><i class="fa fa-fw fa-plus"></i></button>
+                    </div>
+              </div> 
+
+            <div id="tasker">
+               <ul style="list-style-type:none;" id="itemList">
+                  {{!-- <li>
+                    <div class="form-group row">
+                    <label for="charge" class="col-sm-2 col-form-label"></label>
+                        <div class="input-group mb-3 col-sm-4">
+                          <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" readonly>
+                          <div class="input-group-append">
+                            <span style="color:white;background-color:green;" class="input-group-text deleteButton" id="basic-addon2"><i class="fa fa-fw fa-trash-o"></i></span>
+                          </div>
+                        </div>
+                    </div>    
+                  </li> --}}
+                 </ul>
+             </div>
+              
+               
+
+                    {{!-- <div class="col-sm-4">
+                        <input id="item" class="form-control" type="number" name="dates" placeholder="No of items">
+                    </div> --}}
+
+
 
         <div class="form-group row">
             <div class="col-sm-6">
@@ -216,9 +281,65 @@ legend
 
     document.getElementById("dates").min = fullDate(date);
     document.getElementById("dates").value = fullDate(date);
+
+    document.getElementById("add-task").addEventListener("click",function(e){
+      e.preventDefault();
+      $("#itemMessage").css("display","none");
+      var item = document.getElementById("item").value.trim();
+      var count = document.getElementById("count").value;
+      var itemList = document.getElementById("itemList");
+      var items = "";
+
+      if(item === "" || count <= 0){
+        console.log("error");
+        $("#itemMessage").css("display","");
+      }else{
+        console.log(item);
+
+        document.getElementById("item").value = "";
+        document.getElementById("count").value = "";
+        
+        items = '<li><div class="form-group row"><label for="charge" class="col-sm-2 col-form-label"></label><div class="input-group mb-3 col-sm-4"><input type="text" class="form-control" ' 
+                 + 'placeholder="' + item + ' - ' + count
+                 + '" aria-label="Recipient\'s username" aria-describedby="basic-addon2" readonly><div class="input-group-append"><span style="color:white;background-color:green;" class="input-group-text deleteButton" id="basic-addon2"><i class="fa fa-fw fa-trash-o"></i></span></div></div></div></li>';
+        itemList.innerHTML += items;
+
+        evalTask();
+           getItemsList();
+
+      }
+    })
+
+
+    function getItemsList(){
+      var tasklistChildren = document.getElementById("itemList").children;
+      var itemList = [];
+      for (i = 0; i < tasklistChildren.length; i += 1){
+        var temp = tasklistChildren[i].getElementsByTagName("input")[0].placeholder;
+        var item = {};
+        item.name = temp.slice(0,temp.lastIndexOf('-')-1);
+        item.qty = parseInt(temp.slice(temp.lastIndexOf('-')+2,item.length));
+        itemList.push(item);
+			}
+      console.log('list',itemList)
+      return itemList;
+    }
+
+    function evalTask(){
+      var tasklistChildren = document.getElementById("itemList").children;
+      for (i = 0; i < tasklistChildren.length; i += 1){
+        
+				delBtn = tasklistChildren[i].getElementsByTagName("span")[0];
+				delBtn.onclick =  delTask.bind(this,i);
+			}
+    }
+
+    function delTask(i){
+      document.getElementById("itemList").children[i].remove();
+      evalTask();
+    }
   
       document.addEventListener("submit",function(e){
-
           e.preventDefault();
           var location = document.getElementById("location").value;
           var from = document.getElementById("from").value;
@@ -226,15 +347,22 @@ legend
           var date = document.getElementById("dates").value;
           var time = document.getElementById("time").value;
           var charge = document.getElementById("charge").value;
+          var itemList = getItemsList();
 
-          console.log(location,from,to,date,time,charge)
+          if(itemList.length === 0){
+            $("#itemMessage").css("display","");
+                      return;
+          }
 
-          fetch('/deliver',{
+          $("#itemMessage").css("display","none");
+          console.log(location,from,to,date,time,charge,itemList)
+
+          fetch('/receive',{
               method:'post',
               headers: {
               'Content-Type': 'application/json'
               },
-              body:JSON.stringify({location,from,to,date,time,charge})
+              body:JSON.stringify({location,from,to,date,time,charge,itemList})
           }).then(function(response){
             if(response.ok){
               alert('submitted successfully')
