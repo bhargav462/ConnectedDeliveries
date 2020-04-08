@@ -185,8 +185,9 @@ legend
   
 
   var date = new Date();
+
+        document.getElementById("dates").min = fullDate(date);
     document.getElementById("dates").value = fullDate(date);
-    document.getElementById("dates").min = fullDate(date);
 
     document.addEventListener("submit",function(e){
       e.preventDefault();
