@@ -223,14 +223,14 @@ function fullDate(date)
   {
     var minDate = date.getFullYear() + '-';
       var temp;
-      if(date.getMonth() + 1 < 9)
+      if(date.getMonth() + 1 < 10)
       {
         temp = date.getMonth() + 1;
         minDate += "0" + temp + "-";
       }else{
         minDate += temp + "-";
       }
-      if(date.getDate() + 1 < 9)
+      if(date.getDate()  < 10)
       {
         minDate += "0" + date.getDate();
       }else{
