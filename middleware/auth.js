@@ -9,7 +9,7 @@ const auth = async (req,res,next) => {
 
         if(!user){
             console.log('Login')
-           return res.render('Login');
+           return res.redirect("/login")
         }
 
         req.user = user
@@ -18,7 +18,7 @@ const auth = async (req,res,next) => {
 
     } catch (err) {
         console.log('error')
-        res.render('Login');
+        res.render('Login')
     }
 
 }

@@ -39,7 +39,10 @@ app.get('/',auth,(req,res) => {
 })
 
 app.get('/login',auth,(req,res) => {
-    res.render('index');
+    if(req.user){
+        return res.redirect('/');
+    }
+    res.render('Login');
 })
 
 app.get('/register',(req,res) => {

@@ -13,9 +13,9 @@
       
       #outerBody{
           background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
-          height: 100%;
           background-repeat: no-repeat;
-          background-size: cover;   
+          background-size: cover; 
+          height: fit-content;  
       }
       #mainBody{
           padding:20px;
@@ -43,7 +43,17 @@ legend
   #mainBody{
       padding-left: 20%;
   }
+  #deliveries{
+  margin: 50px;
 }
+}
+
+ @media (max-width:360px){
+   #rejectButton{
+     margin-top: 5px;
+   }
+ }
+
 
   </style>
 </head>
@@ -110,11 +120,13 @@ legend
                 <div class="col-md-4">
                 <select id="location" class="form-control">
                     <option>Jalandhar</option>
+                    <option>Amritsar</option>
                 </select>    
                 </div>
             </div>
+
             <div class="form-group row">
-                <label for="From" class="col-sm-2 col-form-label">From</label>
+                <label for="From" class="col-sm-2 col-form-label">From(visiting place)</label>
                 <div class="col-md-4">
                 <select id="from" class="form-control">
                     <option>1</option>
@@ -124,8 +136,11 @@ legend
                 </select>    
                 </div>
             </div>
+
+            <p id="fromMessage" style="display: none; color:red;">From and to address cannot be same</p>
+
             <div class="form-group row">
-                <label for="To" class="col-sm-2 col-form-label">To</label>
+                <label for="To" class="col-sm-2 col-form-label">To(current location)</label>
                 <div class="col-md-4">
                 <select id="to" class="form-control">
                     <option>1</option>
@@ -149,18 +164,18 @@ legend
                 <label for="dates" class="col-sm-2 col-form-label">Time</label>
                 <div class="col-sm-4">
                   <div class="input-group clockpicker">
-		     <input id="time" type="text" class="form-control" value="09:30">
-		     <span class="input-group-addon">
-			   <span class="glyphicon glyphicon-time"></span>
-		     </span>
-	        </div>
+                    <input id="time" type="text" class="form-control" value="09:30">
+                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                    </span>
+	                 </div>
                 </div>
             </div>
 
-        <div class="form-group row">
+           <div class="form-group row">
                 <label for="dates" class="col-sm-2 col-form-label">Charge</label>
                 <div class="col-sm-4">
-        <input id="charge" class="form-control" type="text" placeholder="40" value="40" readonly>
+                   <input id="charge" class="form-control" type="text" placeholder="40" value="40" readonly>
                 </div>
             </div>
 
@@ -174,9 +189,53 @@ legend
 
    
 </form>
-</div>
+
+
 
 </div>
+
+        <fieldset id="deliveries" style="display: none;">
+
+                  <legend id="deliveryLegend">Available Deliveries are</legend>
+                  <div id="deliveryInfo" class="table-responsive">
+                    <table class="table" id="deliveryTable" data-toggle="tooltip" data-placement="top" title="Click on the usernames to get the item details">
+                      <thead>
+                        <tr>
+                          <th>username</th>
+                        </tr>
+                      </thead>
+                      <tbody id="deliveryBody">
+                        {{!-- <tr>
+                          <td colspan="2"><p>John</p>
+                            <table class="table table-dark table-hover">
+                              <tr>
+                                <td>biscuit</td>
+                                <td>3</td>
+                              </tr>
+                              <tr>
+                                  <td>cream</td>
+                                  <td>2</td>
+                              </tr>
+                              <tr>
+                                  <td>choclate</td>
+                                  <td>2</td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td>
+                        </tr> --}}
+
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later</p>
+          </fieldset>
+
+
+</div>
+
+
 
 </body>
 
@@ -198,6 +257,12 @@ legend
       var time = document.getElementById("time").value;
       var charge = document.getElementById("charge").value;
 
+      if(from === to)
+      {
+        document.getElementById("fromMessage").style.display = "";
+        return;
+      }
+
       console.log(location,from,to,date,time,charge)
 
       fetch('/deliver',{
@@ -207,8 +272,31 @@ legend
 			    },
           body:JSON.stringify({location,from,to,date,time,charge})
       }).then(function(response){
+                document.getElementById("fromMessage").style.display = "none";
+          var deliveryTable = document.getElementById("deliveryBody");
+           deliveryTable.innerHTML = '';
          if(response.ok){
            alert('submitted successfully')
+           response.json().then(function(text){
+             var i = 0;
+             var itemTable;
+             text.forEach(function(element){
+               itemTable =  `<tr><td colspan="2"><p>`
+                                         + element.username + ' - ' + element.itemList.length + ' items' + '</p><table class="table table-dark table-hover" style="display:none;">';
+
+               element.itemList.forEach(function(item){
+                 itemTable +=  `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`
+               })
+
+               itemTable += '</table></td><td><button type="button" class="btn btn-success">Accept</button>' 
+                                         + '&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>';
+            
+               deliveryTable.innerHTML += itemTable;
+             })
+
+             evalItemList();
+             document.getElementById("deliveries").style.display  = "";
+           })
          }
       }).catch(function(err){
         alert('An error has occured');
@@ -216,7 +304,43 @@ legend
 
       })
 
+      var deliveryTable = document.getElementById("deliveryBody");
 
+      function evalItemList(){
+
+        if(deliveryTable.children.length === 0)
+        {
+          document.getElementById("deliveryInfo").style.display  = "none";
+          document.getElementById("deliveryLegend").style.display  = "none";
+          document.getElementById("deliveryMessage").style.display = "";
+          console.log('return')
+          return;
+        }
+        console.log('returnhjjhjh')
+          document.getElementById("deliveryMessage").style.display = "none"; 
+
+         for(var i = 0; i < deliveryTable.children.length; i++)
+         {
+           console.log('jbh',deliveryTable.children[i].getElementsByTagName("p")[0])
+           deliveryTable.children[i].getElementsByTagName("p")[0].onclick = getItemList.bind(this,i);
+           deliveryTable.children[i].getElementsByTagName("button")[1].onclick = delUser.bind(this,i);
+         }
+      }
+
+      function delUser(i){
+        console.log('reject',i)
+        deliveryTable.children[i].remove();
+        evalItemList();
+      }
+
+      function getItemList(i){
+         var userItems =  deliveryTable.children[i].getElementsByTagName("table")[0];
+         if(userItems.style.display === ""){
+           userItems.style.display = "none"
+         }else{
+           userItems.style.display = "";
+         }
+      }
 
 // Date function  
 function fullDate(date)
@@ -238,6 +362,7 @@ function fullDate(date)
       }
      return minDate;
   }
+
 </script>
 
       <script src="/javascript/utils/jquery.js"></script>
