@@ -7,6 +7,9 @@ let userSchema = new Schema({
     name:{
         type:String
     },
+    del:{
+        type:String
+    }
     email:{
         type:String,
         unique:true,

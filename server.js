@@ -4,7 +4,7 @@ const hbs = require('hbs');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const auth = require('./middleware/auth')
+const jwt = require('jsonwebtoken');
 
 mongoose.Promise = global.Promise;
 
@@ -14,7 +14,9 @@ app.use(cookieParser())
 const port = process.env.PORT || 3000;
 
 const config = require('./config/config')
+const auth = require('./middleware/auth')
 
+const User = require('./models/user')
 const userRoutes = require('./routes/userRoutes')
 const serviceRoutes = require('./routes/serviceRoutes')
 
@@ -38,10 +40,19 @@ app.get('/',auth,(req,res) => {
     res.render('index');
 })
 
-app.get('/login',auth,(req,res) => {
-    if(req.user){
-        return res.redirect('/');
+app.get('/login',(req,res) => {
+    try{
+        const token =  req.cookies.token
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+        const user = await User.findOne({_id:decoded._id,'tokens.token':token })
+
+        if(user){
+          return  res.redirect('/')
+        }
+    }catch(e){
+
     }
+     
     res.render('Login');
 })
 

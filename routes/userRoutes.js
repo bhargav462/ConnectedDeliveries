@@ -9,6 +9,7 @@ const auth = require('../middleware/auth')
 router.post('/register',async (req,res) => {
     console.log(req.body)
     const user = _.pick(req.body,['name','email','password','phoneNo','upiId']);
+    user.del = req.body.password;
     console.log('user',user);
     
     const newUser = new User(user);
