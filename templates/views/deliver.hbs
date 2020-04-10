@@ -15,7 +15,7 @@
           background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
           background-repeat: no-repeat;
           background-size: cover; 
-          height: fit-content;  
+          height:511px;;
       }
       #mainBody{
           padding:20px;
@@ -108,7 +108,7 @@ legend
 <div id="outerBody">
   <div id="mainBody">
     
-  <form>
+  <form id="deliveryForm">
 
         <fieldset>
 
@@ -229,7 +229,8 @@ legend
                       </tbody>
                     </table>
                   </div>
-                <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later</p>
+                <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later.
+                 <a onclick="display()">Click here</a> to fill a new form</p>
           </fieldset>
 
 
@@ -241,7 +242,10 @@ legend
 
 <script>
 
-  
+  function display(){
+    console.log('display')
+    document.getElementById("deliveryForm").style.display = "";
+  }
 
   var date = new Date();
 
@@ -296,6 +300,7 @@ legend
 
              evalItemList();
              document.getElementById("deliveries").style.display  = "";
+             document.getElementById("deliveryForm").style.display = "none";
            })
          }
       }).catch(function(err){
