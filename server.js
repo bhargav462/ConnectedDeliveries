@@ -50,7 +50,7 @@ app.get('/login',(req,res) => {
           return  res.redirect('/')
         }
     }catch(e){
-
+        return res.render('Login')
     }
      
     res.render('Login');
