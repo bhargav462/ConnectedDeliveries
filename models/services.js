@@ -33,7 +33,7 @@ const serviceSchema = new Schema({
     itemList:{
         type:Array
     },
-    createdAt: { type: Date, expires: '1d', default: Date.now }
+    createdAt: { type: Date, expires: '1m', default: Date.now }
 })
 
 
