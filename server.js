@@ -40,7 +40,7 @@ app.get('/',auth,(req,res) => {
     res.render('index');
 })
 
-app.get('/login',(req,res) => {
+app.get('/login',async (req,res) => {
     try{
         const token =  req.cookies.token
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
