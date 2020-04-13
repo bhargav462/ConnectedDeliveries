@@ -9,7 +9,14 @@ body{
 	overflow-x: hidden;
 	transition: all 200ms linear;
 	height: fit-content;
+	margin: 0px;
+	padding: 0px;
 }
+
+html{
+	margin: 0px;
+}
+
 ::selection {
 	color: #fff;
 	background-color: #ff4242;

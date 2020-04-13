@@ -27,7 +27,8 @@
     "lodash": "^4.17.15",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "web-push": "^3.4.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

@@ -1,11 +1,15 @@
 {
   "production":{
     "MONGODB_URI" : "mongodb+srv://conDel:delcon@mycluster-ebxbe.mongodb.net/condel?retryWrites=true&w=majority",
-    "JWT_SECRET" : "mhtcsqbfe"
+    "JWT_SECRET" : "mhtcsqbfe",
+    "publicVapidKey" :  "BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw",
+    "privateVapidKey" : "yB6Tp7p-VzQv4XsF5PikeqCBvAFG6vzXXo3xLmLZ5q4"
   },
   "development":{
       "PORT":3000,
       "MONGODB_URI" : "mongodb://127.0.0.1:27017/conDel",
-      "JWT_SECRET" : "mhtcsqbfe"
+      "JWT_SECRET" : "mhtcsqbfe",
+      "publicVapidKey" :  "BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw",
+      "privateVapidKey" : "yB6Tp7p-VzQv4XsF5PikeqCBvAFG6vzXXo3xLmLZ5q4"
   }
 }

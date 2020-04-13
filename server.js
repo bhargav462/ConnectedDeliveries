@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const webpush = require('web-push')
 
 mongoose.Promise = global.Promise;
 
@@ -31,6 +32,26 @@ app.use(bodyParser.json());
 app.set('view engine','hbs');
 app.set('views',viewsPath);
 hbs.registerPartials(partialsPath);
+
+webpush.setVapidDetails('mailto:bhargavnakkina462@gmail.com',process.env.publicVapidKey,process.env.privateVapidKey);
+
+app.post('/subscribe',(req,res) => {
+    const subscription = {
+        endpoint: 'https://fcm.googleapis.com/fcm/send/c2kUB6RLeI0:APA91bGlriwnMQs8auxBSJR3dEPEcqyF3KQA5A4qh05NIVHn6Y99zOvhSslTENfVPTJjtzBdrAg7JiU3ATGuEZork0d9IU4hjp1M0g2r-2mZ7WbgChrdFZq4tfnuI_86pPixumJlfKrZ',
+        expirationTime: null,
+        keys: {
+          p256dh: 'BBYowAObozCLqcBSxAAJjH83J-qF-rzBw7k310_dNtLVGx_7BIsxrfHkeLA4kDsIx8jkNpFiLPOymgzNXB2LVoA',
+          auth: '4VbAzzeo4HMX7He7yU_1dQ'
+        }
+      };
+
+    console.log('subscription',subscription)
+
+    res.status(201).json({});
+
+    const payload  = JSON.stringify({title:'Connected Deliveries'});
+    webpush.sendNotification(subscription,payload).catch(err => console.error(err));
+})
 
 app.use(express.static(publicDirectoryPath))
 app.use(userRoutes)

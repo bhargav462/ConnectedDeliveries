@@ -15,7 +15,7 @@
           background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
           background-repeat: no-repeat;
           background-size: cover; 
-          height:511px;;
+          height:100%;
       }
       #mainBody{
           padding:20px;
@@ -45,7 +45,14 @@ legend
   }
   #deliveries{
   margin: 50px;
+  margin-bottom: 0em;
 }
+}
+
+#time{
+  color:#FEE715FF;
+  background-color: #101820FF;
+  padding: 5px;
 }
 
  @media (max-width:360px){
@@ -242,9 +249,13 @@ legend
 
 <script>
 
+  const publicVapidKey = 'BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw';
+
   function display(){
     console.log('display')
     document.getElementById("deliveryForm").style.display = "";
+    document.getElementById("deliveryMessage").style.display = "none"; 
+    document.getElementById("deliveries").style.display = "none";
   }
 
   var date = new Date();
@@ -285,8 +296,11 @@ legend
              var i = 0;
              var itemTable;
              text.forEach(function(element){
+               console.log('element',element);
                itemTable =  `<tr><td colspan="2"><p>`
                                          + element.username + ' - ' + element.itemList.length + ' items' + '</p><table class="table table-dark table-hover" style="display:none;">';
+
+               itemTable += `<p id="time">Time - ${element.time}</p>`  
 
                element.itemList.forEach(function(item){
                  itemTable +=  `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`
@@ -301,6 +315,7 @@ legend
              evalItemList();
              document.getElementById("deliveries").style.display  = "";
              document.getElementById("deliveryForm").style.display = "none";
+             console.log(deliveryTable.innerHTML)
            })
          }
       }).catch(function(err){
@@ -329,7 +344,18 @@ legend
            console.log('jbh',deliveryTable.children[i].getElementsByTagName("p")[0])
            deliveryTable.children[i].getElementsByTagName("p")[0].onclick = getItemList.bind(this,i);
            deliveryTable.children[i].getElementsByTagName("button")[1].onclick = delUser.bind(this,i);
+           deliveryTable.children[i].getElementsByTagName("button")[0].onclick = webPush.bind(this,i);
          }
+      }
+
+      function webPush(i){
+          const temp = deliveryTable.children[i].getElementsByTagName("p")[0]
+          temp = temp.slice(0,temp.lastIndexOf('-')-1)
+
+           if('serviceWorker' in navigator){
+              send().catch(err => console.error(err))
+           } 
+          
       }
 
       function delUser(i){
@@ -367,6 +393,55 @@ function fullDate(date)
       }
      return minDate;
   }
+
+  //Web Push notifications
+
+  if('serviceWorker' in navigator){
+    send().catch(err => console.error(err))
+    alert('something');
+  }
+
+  async function send(){
+    console.log('Registering service worker...')
+    const register = await navigator.serviceWorker.register('/javascript/utils/worker.js',{
+        scope:'/javascript/utils/'
+    });
+
+    console.log('Service Worker registered');
+
+    console.log('Registering push ...')
+    const subscription = await register.pushManager.subscribe({
+        userVisibleOnly : true,
+        applicationServerKey : urlBase64ToUint8Array(publicVapidKey)
+    });
+    console.log('Push registered...');
+
+    console.log('Sending Push...');
+    await fetch('/subscribe',{
+        method:'post',
+        body:JSON.stringify(subscription),
+        headers:{
+            'content-type':'application/json'
+        }
+    });
+    console.log('Push sent...');
+}
+
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+   
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+   
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
 
 </script>
 

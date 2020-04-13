@@ -30,6 +30,9 @@ let userSchema = new Schema({
         required:true,
         unique:true
     },
+    subscriptionKey:{
+        type:String
+    },
     tokens:[{
         token:{
             type:String        }
