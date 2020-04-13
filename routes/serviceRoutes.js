@@ -65,7 +65,7 @@ router.post('/accepted',auth,async(req,res) => {
 
     User.findOne({name:req.body.name}).then((result) => {
         console.log('result',result);
-        const payload  = JSON.stringify({title:'Connected Deliveries'});
+        const payload  = JSON.stringify({title:'Connected Deliveries',name:req.user.name});
         res.send();
         webpush.sendNotification(result.subscriptionKey,payload).catch(err => console.error(err));
     })
