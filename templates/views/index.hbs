@@ -69,6 +69,80 @@
        window.location.href = "/login";
     });
 
+            //Web Push notifications
+
+              const publicVapidKey = 'BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw';
+
+     alert('be')
+			if('serviceWorker' in navigator){
+				send().catch(err => alert('errr'))
+				alert('something');
+			}
+      notifyMe();
+    alert('kfna')
+   
+			async function send(){
+				console.log('Registering service worker...')
+				const register = await navigator.serviceWorker.register('/javascript/utils/worker.js',{
+					scope:'/javascript/utils/'
+				});
+
+				console.log('Service Worker registered');
+
+				console.log('Registering push ...')
+				const subscription = await register.pushManager.subscribe({
+					userVisibleOnly : true,
+					applicationServerKey : urlBase64ToUint8Array(publicVapidKey)
+				});
+				console.log('Push registered...');
+
+				alert('Sending Push...');
+				await fetch('/subscribe',{
+					method:'post',
+					body:JSON.stringify(subscription),
+					headers:{
+						'content-type':'application/json'
+					}
+				});
+				console.log('Push sent...');
+			}
+
+
+			function urlBase64ToUint8Array(base64String) {
+				const padding = '='.repeat((4 - base64String.length % 4) % 4);
+				const base64 = (base64String + padding)
+				.replace(/-/g, '+')
+				.replace(/_/g, '/');
+			
+				const rawData = window.atob(base64);
+				const outputArray = new Uint8Array(rawData.length);
+			
+				for (let i = 0; i < rawData.length; ++i) {
+				outputArray[i] = rawData.charCodeAt(i);
+				}
+				return outputArray;
+			}
+
+     
+	  function notifyMe() {
+  if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+  }
+  else if (Notification.permission === "") {
+     Notification.requestPermission().then(function (permission) {
+    });
+  }
+  else if (Notification.permission === "denied") {
+    alert("bjh")
+    Notification.requestPermission().then(function (permission) {
+      alert(permission)
+    });
+  }else{
+    alert(Notification.permission)
+  }
+  
+var notification = new Notification("Hi there!");
+}
 </script>
 
 </body>

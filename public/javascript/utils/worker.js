@@ -4,7 +4,7 @@ self.addEventListener("push", e => {
   const data = e.data.json();
   console.log("Push Recieved...");
   self.registration.showNotification(data.title, {
-    body: "Accepted by bhargav",
+    body: `Your request was accepted by ${data.user}`,
     icon:'https://connected-deliveries.herokuapp.com/images/circle-cropped.png'
   });
 });

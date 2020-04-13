@@ -3,6 +3,7 @@ const _ = require('lodash');
 const Service = require('../models/services')
 const User = require('../models/user')
 const auth = require('../middleware/auth');
+const webpush = require('web-push')
 const router = express.Router();
 
 router.post('/deliver',auth,(req,res) => {
@@ -58,6 +59,17 @@ router.post('/getOrders',async(req,res) => {
 
         res.send(response);
     })
+})
+
+router.post('/accepted',auth,async(req,res) => {
+
+    User.findOne({name:req.body.name}).then((result) => {
+        console.log('result',result);
+        const payload  = JSON.stringify({title:'Connected Deliveries'});
+        res.send();
+        webpush.sendNotification(result.subscriptionKey,payload).catch(err => console.error(err));
+    })
+
 })
 
 module.exports = router;

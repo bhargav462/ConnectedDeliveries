@@ -31,7 +31,7 @@ let userSchema = new Schema({
         unique:true
     },
     subscriptionKey:{
-        type:String
+        type:Object
     },
     tokens:[{
         token:{

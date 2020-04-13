@@ -249,7 +249,6 @@ legend
 
 <script>
 
-  const publicVapidKey = 'BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw';
 
   function display(){
     console.log('display')
@@ -349,12 +348,21 @@ legend
       }
 
       function webPush(i){
-          const temp = deliveryTable.children[i].getElementsByTagName("p")[0]
-          temp = temp.slice(0,temp.lastIndexOf('-')-1)
+          var name = deliveryTable.children[i].getElementsByTagName("p")[0].textContent; 
+          name = name.slice(0,name.lastIndexOf('-')-1)
+          console.log(name);
 
-           if('serviceWorker' in navigator){
-              send().catch(err => console.error(err))
-           } 
+           fetch('/accepted',{
+             method:'post',
+             headers: {
+              'Content-Type': 'application/json'
+              },
+            body:JSON.stringify({name})
+           }).then(function(response){
+              if(response.ok){
+                alert('Notification was sent');
+              }
+           })
           
       }
 
@@ -394,55 +402,7 @@ function fullDate(date)
      return minDate;
   }
 
-  //Web Push notifications
-
-  if('serviceWorker' in navigator){
-    send().catch(err => console.error(err))
-    alert('something');
-  }
-
-  async function send(){
-    console.log('Registering service worker...')
-    const register = await navigator.serviceWorker.register('/javascript/utils/worker.js',{
-        scope:'/javascript/utils/'
-    });
-
-    console.log('Service Worker registered');
-
-    console.log('Registering push ...')
-    const subscription = await register.pushManager.subscribe({
-        userVisibleOnly : true,
-        applicationServerKey : urlBase64ToUint8Array(publicVapidKey)
-    });
-    console.log('Push registered...');
-
-    console.log('Sending Push...');
-    await fetch('/subscribe',{
-        method:'post',
-        body:JSON.stringify(subscription),
-        headers:{
-            'content-type':'application/json'
-        }
-    });
-    console.log('Push sent...');
-}
-
-
-  function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
-   
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
-   
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
-    return outputArray;
-}
-
+  
 </script>
 
       <script src="/javascript/utils/jquery.js"></script>
