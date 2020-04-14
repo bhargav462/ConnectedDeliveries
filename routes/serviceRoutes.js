@@ -40,8 +40,11 @@ router.post('/receive',auth,(req,res) => {
         console.log(service)
 
     service.save().then((result) => {
-        console.log()
-        res.send(); 
+        
+        Service.find({mode:'deliver',location:result.location,from:result.from,to:result.to,date:result.date}).then((deliveryMan) => {
+            console.log(deliveryMan);
+            res.send(deliveryMan);
+        })
     }).catch((err) => {
         res.status(403).send()
     });

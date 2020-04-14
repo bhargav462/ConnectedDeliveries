@@ -75,7 +75,7 @@ legend
   #mainBody{
       padding-left: 20%;
   }
-   #deliveries{
+   #deliveryMan{
   margin: 50px;
   margin-bottom: 0em;
 }
@@ -86,6 +86,12 @@ legend
   background-color: #101820FF;
   padding: 5px;
 }
+
+ @media (max-width:360px){
+   #rejectButton{
+     margin-top: 5px;
+   }
+ }
 
   </style>
   
@@ -145,7 +151,7 @@ legend
 <div id="outerBody">
   <div id="mainBody">
     
-  <form>
+  <form id="receiveForm">
 
         <fieldset>
 
@@ -160,6 +166,9 @@ legend
                 </select>    
                 </div>
             </div>
+
+            <p id="fromMessage" style="display: none; color:red;">From and to address cannot be same</p>
+
             <div class="form-group row">
                 <label for="From" class="col-sm-2 col-form-label">From</label>
                 <div class="col-md-4">
@@ -256,6 +265,7 @@ legend
                         <input id="item" class="form-control" type="number" name="dates" placeholder="No of items">
                     </div> --}}
 
+        <p id="fromMessage" style="display: none; color:red;">From and to address cannot be same</p>
 
 
         <div class="form-group row">
@@ -273,37 +283,21 @@ legend
      <fieldset id="deliveryMan">
         <legend id="deliveryManLegend">Available Delivery Mans are</legend>
         <div id="deliveryManInfo" class="table-responsive">
-           <table style="display: none;" class="table" id="deliveryManTable" data-toggle="tooltip" data-placement="top" title="Click on the usernames to get the Delivery details">
+           <table class="table" id="deliveryManTable" data-toggle="tooltip" data-placement="top" title="Click on the usernames to get the Delivery details">
                 <thead>
                    <tr>
                      <th>username</th>
                    </tr>
                 </thead>
                 <tbody id="deliveryManBody">
-                        <tr>
-                          <td colspan="2"><p>John</p>
-                            <table class="table table-dark table-hover">
-                              <tr>
-                                <td>biscuit</td>
-                                <td>3</td>
-                              </tr>
-                              <tr>
-                                  <td>cream</td>
-                                  <td>2</td>
-                              </tr>
-                              <tr>
-                                  <td>choclate</td>
-                                  <td>2</td>
-                              </tr>
-                            </table>
-                          </td>
-                          <td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td>
-                        </tr>
+                        
 
                         
                 </tbody>
            </table>
         </div>
+        <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later.
+                 <a onclick="display()">Click here</a> to fill a new form</p>
      </fieldset>
 
 
@@ -395,6 +389,12 @@ legend
           var charge = document.getElementById("charge").value;
           var itemList = getItemsList();
 
+          if(from === to)
+          {
+            document.getElementById("fromMessage").style.display = "";
+            return;
+          }
+
           if(itemList.length === 0){
             $("#itemMessage").css("display","");
                       return;
@@ -410,14 +410,92 @@ legend
               },
               body:JSON.stringify({location,from,to,date,time,charge,itemList})
           }).then(function(response){
-            if(response.ok){
-              alert('submitted successfully')
-            }
+
+            document.getElementById("fromMessage").style.display = "none";
+
+              var delManTable = document.getElementById("deliveryManBody");
+              delManTable.innerHTML = "";
+
+              if(response.ok){
+           alert('submitted successfully')
+           response.json().then(function(text){
+
+             var i = 0;
+             var itemTable;
+             text.forEach(function(element){
+               console.log('element',element);
+               itemTable =  `<tr><td colspan="2"><p>`
+                                         + element.username + '</p>';
+
+               itemTable += `<p id="time">Time - ${element.time}</p>`  
+
+               itemTable += '</td><td><button type="button" class="btn btn-success">Accept</button>' 
+                                         + '&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>';
+            
+               delManTable.innerHTML += itemTable;
+             })
+
+             evalItemList();
+             document.getElementById("deliveryMan").style.display  = "";
+             document.getElementById("receiveForm").style.display = "none";
+             console.log(delManTable.innerHTML)
+           })
+         }
+
           }).catch(function(err){
             alert('An error has occured');
           })
 
       })
+
+      var deliveryTable = document.getElementById("deliveryManBody");
+
+      function evalItemList(){
+
+        if(deliveryTable.children.length === 0)
+        {
+          document.getElementById("deliveryManInfo").style.display  = "none";
+          document.getElementById("deliveryManLegend").style.display  = "none";
+          document.getElementById("deliveryMessage").style.display = "";
+          console.log('return')
+          return;
+        }
+        console.log('returnhjjhjh')
+          document.getElementById("deliveryMessage").style.display = "none"; 
+
+         for(var i = 0; i < deliveryTable.children.length; i++)
+         {
+           console.log('jbh',deliveryTable.children[i].getElementsByTagName("p")[0])
+           deliveryTable.children[i].getElementsByTagName("button")[1].onclick = delUser.bind(this,i);
+           deliveryTable.children[i].getElementsByTagName("button")[0].onclick = webPush.bind(this,i);
+         }
+      }
+
+      function webPush(i){
+          var name = deliveryTable.children[i].getElementsByTagName("p")[0].textContent; 
+          name = name.slice(0,name.lastIndexOf('-')-1)
+          console.log(name);
+
+           fetch('/accepted',{
+             method:'post',
+             headers: {
+              'Content-Type': 'application/json'
+              },
+            body:JSON.stringify({name})
+           }).then(function(response){
+              if(response.ok){
+                alert('Notification was sent');
+              }
+           })
+          
+      }
+
+      function delUser(i){
+        console.log('reject',i)
+        deliveryTable.children[i].remove();
+        evalItemList();
+      }
+
 
 // Date section
    function fullDate(date)
