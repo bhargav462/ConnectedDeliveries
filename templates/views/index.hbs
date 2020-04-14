@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connected Deliveries</title>
-      <link rel="icon" href="images/circle-cropped.png" type="image/icon type">
+      <link rel="icon" href="/images/circle-cropped.png" type="image/icon type">
   <link rel='stylesheet' href='/styles/utils/bootstrap.css'>
   <link rel="stylesheet" href="/styles/utils/googleFonts.css">
   <link rel="stylesheet" href="/styles/header.css">
@@ -69,17 +69,14 @@
        window.location.href = "/login";
     });
 
-            //Web Push notifications
+     //Web Push notifications
 
-              const publicVapidKey = 'BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw';
+      const publicVapidKey = 'BEUKKprV93HSM_kvIvKn9-XGbz8ioi1idf02Ta27LRKfJ0KUTfuvx0gikP-PtabmhLLQJWp398exTepv4BXyyKw';
 
-     alert('be')
 			if('serviceWorker' in navigator){
 				send().catch(err => alert('errr'))
-				alert('something');
 			}
       notifyMe();
-    alert('kfna')
    
 			async function send(){
 				console.log('Registering service worker...')
@@ -87,16 +84,11 @@
 					scope:'/javascript/utils/'
 				});
 
-				console.log('Service Worker registered');
-
-				console.log('Registering push ...')
 				const subscription = await register.pushManager.subscribe({
 					userVisibleOnly : true,
 					applicationServerKey : urlBase64ToUint8Array(publicVapidKey)
 				});
-				console.log('Push registered...');
 
-				alert('Sending Push...');
 				await fetch('/subscribe',{
 					method:'post',
 					body:JSON.stringify(subscription),
@@ -104,7 +96,6 @@
 						'content-type':'application/json'
 					}
 				});
-				console.log('Push sent...');
 			}
 
 
@@ -124,25 +115,20 @@
 			}
 
      
-	  function notifyMe() {
-  if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
-  }
-  else if (Notification.permission === "") {
-     Notification.requestPermission().then(function (permission) {
-    });
-  }
-  else if (Notification.permission === "denied") {
-    alert("bjh")
-    Notification.requestPermission().then(function (permission) {
-      alert(permission)
-    });
-  }else{
-    alert(Notification.permission)
-  }
-  
-var notification = new Notification("Hi there!");
-}
+    function notifyMe() {
+      if (!("Notification" in window)) {
+            alert("This browser does not support desktop notifications");
+      }
+      else if (Notification.permission === "") {
+        Notification.requestPermission().then(function (permission) {
+        });
+      }
+      else if (Notification.permission === "denied") {
+        Notification.requestPermission().then(function (permission) {
+        });
+      }else{
+      }
+    }
 </script>
 
 </body>
