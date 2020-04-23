@@ -81,6 +81,11 @@ app.get('/deliver',auth,(req,res) => {
     res.render('deliver');
 })
 
+app.get('/notifications',auth,(req,res) => {
+    console.log('notifications')
+    res.render('notifications');
+})
+
 app.get('*',(req,res) => {
     res.status(404).send();
 })

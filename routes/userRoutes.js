@@ -8,7 +8,7 @@ const auth = require('../middleware/auth')
 
 router.post('/register',async (req,res) => {
     console.log(req.body)
-    const user = _.pick(req.body,['name','email','password','phoneNo','upiId']);
+    const user = _.pick(req.body,['name','email','password','phoneNo','upiId','username']);
     user.del = req.body.password;
     console.log('user',user);
     
@@ -17,11 +17,22 @@ router.post('/register',async (req,res) => {
         console.log('saved suucessfully');
         res.status(200).send(result);
     }).catch(async (e) => {
+
+        var username = await User.findOne({username:req.body.username},'username');
+
+        console.log('username',username)
+
+        if(username){
+            return res.status(403).send({error:"username"})
+        }
+
         var email = await User.findOne({email:req.body.email},'email')
+        console.log('email',email);
         if(email)
         {
             return res.status(403).send({ error: "email" });
         }
+        
         var phoneNo = await User.findOne({phoneNo:req.body.phoneNo},'phoneNo')
         if(phoneNo)
         {

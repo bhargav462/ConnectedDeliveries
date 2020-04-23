@@ -4,6 +4,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
 let userSchema = new Schema({
+    username:{
+        type:String,
+        unique:true
+    },
     name:{
         type:String
     },

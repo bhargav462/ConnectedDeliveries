@@ -280,7 +280,7 @@ legend
 
 </div>
 
-     <fieldset id="deliveryMan">
+     <fieldset id="deliveryMan" style="display:none;">
         <legend id="deliveryManLegend">Available Delivery Mans are</legend>
         <div id="deliveryManInfo" class="table-responsive">
            <table class="table" id="deliveryManTable" data-toggle="tooltip" data-placement="top" title="Click on the usernames to get the Delivery details">
@@ -378,6 +378,13 @@ legend
       document.getElementById("itemList").children[i].remove();
       evalTask();
     }
+
+    function display(){
+    console.log('display')
+    document.getElementById("receiveForm").style.display = "";
+    document.getElementById("deliveryMessage").style.display = "none"; 
+    document.getElementById("deliveryMan").style.display = "none";
+  }
   
       document.addEventListener("submit",function(e){
           e.preventDefault();
@@ -429,14 +436,14 @@ legend
 
                itemTable += `<p id="time">Time - ${element.time}</p>`  
 
-               itemTable += '</td><td><button type="button" class="btn btn-success">Accept</button>' 
+               itemTable += '</td><td><button type="button" class="btn btn-success">Request</button>' 
                                          + '&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>';
             
                delManTable.innerHTML += itemTable;
              })
 
              evalItemList();
-             document.getElementById("deliveryMan").style.display  = "";
+             document.getElementById("deliveryMan").style.display = "";
              document.getElementById("receiveForm").style.display = "none";
              console.log(delManTable.innerHTML)
            })
@@ -473,10 +480,10 @@ legend
 
       function webPush(i){
           var name = deliveryTable.children[i].getElementsByTagName("p")[0].textContent; 
-          name = name.slice(0,name.lastIndexOf('-')-1)
-          console.log(name);
+          name = name.trim();
+          console.log('name', name);
 
-           fetch('/accepted',{
+           fetch('/receiveRequested',{
              method:'post',
              headers: {
               'Content-Type': 'application/json'
@@ -484,6 +491,7 @@ legend
             body:JSON.stringify({name})
            }).then(function(response){
               if(response.ok){
+                delUser(i);
                 alert('Notification was sent');
               }
            })

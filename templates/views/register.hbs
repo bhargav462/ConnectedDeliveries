@@ -44,6 +44,13 @@
 						<span class="focus-input100" data-placeholder="Name"></span>
 					</div>
 
+					<div class="wrap-input100">
+						<input id="userName" class="input100" type="text" name="userName" required>
+						<span class="focus-input100" data-placeholder="Username"></span>
+					</div>
+
+					<p id="usernameMessage" style="display: none;">Username already exists</p>
+
 					<div class="wrap-input100 ">
 						<input id="email" class="input100" type="email" name="email" required>
 						<span class="focus-input100" data-placeholder="Email"></span>
@@ -134,11 +141,14 @@
 	   e.preventDefault();
 
 	 const name = document.getElementById("name").value;
+	 const username = document.getElementById("userName").value;
      const email = document.getElementById("email").value;
 	 const password = document.getElementById("password").value;
 	 const retypePassword = document.getElementById("retypePassword").value;
 	 const phoneNo = document.getElementById("phoneNo").value;
 	 const upiId = document.getElementById("upiId").value;
+
+	 console.log('username',username,name,email)
 
 	 if(password !== retypePassword){
     $('#message').html('Not Matching').css('color', 'red');
@@ -149,7 +159,7 @@
 					headers: {
 			'Content-Type': 'application/json'
 			},
-				body : JSON.stringify({name,email,password,phoneNo,upiId})
+				body : JSON.stringify({name,email,password,phoneNo,upiId,username})
 			}).then(function(response) {
 
 				if (response.ok) {
@@ -168,14 +178,22 @@
                           $('#emailMessage').css('display','').css('color','red');
 						  $('#phonenoMessage').css('display',"none");
 						  $('#upiMessage').css('display',"none");
+						  $("#usernameMessage").css('display',"none");
 						}else if(e.message === 'phoneNo'){
                           $('#emailMessage').css('display','none');
 						  $('#phonenoMessage').css('display',"").css('color','red');
 						  $('#upiMessage').css('display',"none");
+						  $("#usernameMessage").css('display',"none");
 						}else if(e.message === 'upiId'){
 						  $('#emailMessage').css('display','none');
 						  $('#phonenoMessage').css('display',"none");
 						  $('#upiMessage').css('display',"").css('color','red');
+						  $("#usernameMessage").css('display',"none");
+						}else if(e.message === "username"){
+						  $('#emailMessage').css('display','none');
+						  $('#phonenoMessage').css('display',"none");
+						  $('#upiMessage').css('display',"none");
+						  $("#usernameMessage").css('display',"").css('color','red');	
 						}
 					})
 					return 'error';

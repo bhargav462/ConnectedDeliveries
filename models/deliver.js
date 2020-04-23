@@ -2,15 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Types.ObjectId;
 
-const serviceSchema = new Schema({
+const deliverSchema = new Schema({
     username:{
         type:String
     },
     userId : {
         type:ObjectId
-    },
-    mode:{
-        type:String
     },
     location : {
         type:String
@@ -30,11 +27,32 @@ const serviceSchema = new Schema({
     charge:{
         type:Number
     },
-    itemList:{
-        type:Array
+    reqSent:[{
+        username:{
+          type:String
+        },
+        userId:{
+            type:ObjectId
+        }
+    }],
+    reqReceived:[{
+        username:{
+            type:String
+        },
+        userId:{
+            type:ObjectId
+        }
+    }],
+    acceptedBy:{
+        username:{
+            type:String
+        },
+        userId:{
+            type:String
+        }
     },
     createdAt: { type: Date, expires: '1d', default: Date.now }
 })
 
 
-module.exports = mongoose.model('Service',serviceSchema)
+module.exports = mongoose.model('deliver',deliverSchema)

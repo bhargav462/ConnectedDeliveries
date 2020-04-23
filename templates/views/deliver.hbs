@@ -305,7 +305,7 @@ legend
                  itemTable +=  `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`
                })
 
-               itemTable += '</table></td><td><button type="button" class="btn btn-success">Accept</button>' 
+               itemTable += '</table></td><td><button type="button" class="btn btn-success">Request</button>' 
                                          + '&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>';
             
                deliveryTable.innerHTML += itemTable;
@@ -314,7 +314,6 @@ legend
              evalItemList();
              document.getElementById("deliveries").style.display  = "";
              document.getElementById("deliveryForm").style.display = "none";
-             console.log(deliveryTable.innerHTML)
            })
          }
       }).catch(function(err){
@@ -352,7 +351,7 @@ legend
           name = name.slice(0,name.lastIndexOf('-')-1)
           console.log(name);
 
-           fetch('/accepted',{
+           fetch('/deliveryRequested',{
              method:'post',
              headers: {
               'Content-Type': 'application/json'
@@ -360,6 +359,7 @@ legend
             body:JSON.stringify({name})
            }).then(function(response){
               if(response.ok){
+                delUser(i);
                 alert('Notification was sent');
               }
            })
