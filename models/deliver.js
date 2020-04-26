@@ -37,19 +37,37 @@ const deliverSchema = new Schema({
     }],
     reqReceived:[{
         username:{
-            type:String
+            type:String,
+            unique:true
         },
         userId:{
-            type:ObjectId
+            type:ObjectId,
+            unique:true
         }
     }],
     acceptedBy:{
         username:{
-            type:String
+            type:String,
+            unique:true
         },
         userId:{
-            type:String
+            type:String,
+            unique:true
         }
+    },
+    rejectedBy:[{
+        username:{
+            type:String,
+            unique:true
+          },
+          userId:{
+              type:ObjectId,
+              unique:true
+          }
+    }],
+    vacancy:{
+        type:Number,
+        default:0
     },
     createdAt: { type: Date, expires: '1d', default: Date.now }
 })

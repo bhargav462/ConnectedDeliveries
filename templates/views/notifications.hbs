@@ -43,6 +43,10 @@
 }
 }
 
+ hr{
+   background-color: white;
+ }
+
 
   </style>
 </head>
@@ -114,7 +118,7 @@
                         </tr>
                       </thead> --}}
                       <tbody id="notifBody">
-                        <tr>
+                        {{!-- <tr>
                           <td colspan="2"><p>bhargav sent a request to deliver his items</p>
                             
                           </td>
@@ -126,9 +130,10 @@
                           </td>
                           <td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td>
                         </tr>
-                        
+                         --}}
                       </tbody>
                     </table>
+                    <hr>
                   </div>
                 <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later.
                  <a onclick="display()">Click here</a> to fill a new form</p>
@@ -159,7 +164,7 @@
      
         if(text.deliver)
           text.deliver.forEach((element) => {
-            notificationString += `<tr><td colspan="2"><p>${element.username} sent a request to deliver his items</p></td>` +
+            notificationString += `<tr><td colspan="2"><p id="del" name="${element.username}">${element.username} sent a request to deliver his items</p></td>` +
                           '<td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>'
           })
 
@@ -167,10 +172,34 @@
 
         if(text.receive)
           text.receive.forEach((element) => {
-            notificationString += `<tr><td colspan="2"><p>${element.username} wants to deliver the items</p></td>` +
+            notificationString += `<tr><td colspan="2"><p id="rec" name="${element.username}">${element.username} wants to deliver your items</p></td>` +
                           '<td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>'
           
           })
+
+          if(text.delRejected){
+            text.delRejected.forEach((element) => {
+              console.log('delRejected',element)
+              notificationString += `<tr><td colspan="2"><p id="delRej" name="${element.username}">${element.username} rejected your delivery request</p></td></tr>`;
+            })
+          }
+
+          if(text.recRejected){
+            text.recRejected.forEach((element) => {
+              console.log('recRejected',element)
+              notificationString += `<tr><td colspan="2"><p id="recRej" name="${element.username}">${element.username} rejected your request to deliver your items</p></td></tr>`;
+            })
+          }
+
+          console.log('delAccepted',text.delAccepted)
+          if(text.delAccepted){
+            notificationString += `<tr><td colspan="2"><p id="delAcc" name="${text.delAccepted.username}">${text.delAccepted.username} accepted your delivery request</p></td></tr>`;
+          }
+
+          console.log('recAccepted',text.recAccepted)
+          if(text.recAccepted){
+            notificationString += `<tr><td colspan="2"><p id="recAcc" name="${text.recAccepted.username}">${text.recAccepted.username} accepted your request to deliver your items</p></td></tr>`;
+          }
           
           notifBody.innerHTML = notificationString;
           evalItemList();
@@ -197,18 +226,64 @@
 
          for(var i = 0; i < notifBody.children.length; i++)
          {
-           notifBody.children[i].getElementsByTagName("button")[1].onclick = delUser.bind(this,i);
+           if(notifBody.children[i].getElementsByTagName("button")[1])
+           {
+             notifBody.children[i].getElementsByTagName("button")[1].onclick = delUser.bind(this,i);
                       console.log('jbh',notifBody.children[i].getElementsByTagName("button")[1])
 
-          // deliveryTable.children[i].getElementsByTagName("button")[0].onclick = webPush.bind(this,i);
+           notifBody.children[i].getElementsByTagName("button")[0].onclick = webPush.bind(this,i);
+         
+           }
          }
       }
 
       function delUser(i){
         console.log('reject',i)
-        notifBody.children[i].remove();
-        evalItemList();
+
+        var mode = notifBody.children[i].getElementsByTagName("p")[0].id
+        var username = notifBody.children[i].getElementsByTagName("p")[0].getAttribute("name")
+
+        console.log('mode',mode,'username',username)
+
+        fetch('/rejected',{
+          method:'post',
+          headers:{
+            'Content-type':'application/json'
+          },
+          body:JSON.stringify({mode,username})
+        }).then(function(response){
+          if(response.ok){
+            notifBody.children[i].remove();
+            evalItemList();
+            alert('rejected successfully')
+          }
+        })
+
       }
+
+      function webPush(i){
+       
+        var mode = notifBody.children[i].getElementsByTagName("p")[0].id
+        var username = notifBody.children[i].getElementsByTagName("p")[0].getAttribute("name")
+
+        console.log('mode',mode,'username',username)
+
+           fetch('/accepted',{
+             method:'post',
+             headers: {
+              'Content-Type': 'application/json'
+              },
+            body:JSON.stringify({username,mode})
+           }).then(function(response){
+              if(response.ok){
+                notifBody.children[i].remove();
+                evalItemList();
+                alert('Notification was sent');
+              }
+           })
+      }
+
+
 </script>
 
 </html>
