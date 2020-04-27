@@ -150,14 +150,14 @@ router.post('/receiveRequested',auth,async(req,res) => {
 router.post('/notification',auth,async (req,res) => {
 
     try{
-        var deliver = await Deliver.findOne({userId:req.user._id,vacancy:0})
+        var deliver = await Deliver.findOne({userId:req.user._id})
         
-        var receive = await Receive.findOne({userId:req.user._id,vacancy:0})
+        var receive = await Receive.findOne({userId:req.user._id})
 
         console.log('deliver',deliver,'receive',receive);
         
         var need = {};
-        if(deliver && deliver.reqReceived.length > 0)
+        if(deliver && deliver.reqReceived.length > 0 && deliver.vacancy === 0)
         {
             console.log('deliver',deliver)
             need.deliver = deliver.reqReceived;
@@ -175,7 +175,7 @@ router.post('/notification',auth,async (req,res) => {
         }
         
     
-        if(receive && receive.reqReceived.length > 0)
+        if(receive && receive.reqReceived.length > 0 && receive.vacancy === 0)
         {
             console.log('receive',receive)
             need.receive = receive.reqReceived;
