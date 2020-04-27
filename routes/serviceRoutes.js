@@ -150,9 +150,11 @@ router.post('/receiveRequested',auth,async(req,res) => {
 router.post('/notification',auth,async (req,res) => {
 
     try{
-        var deliver = await Deliver.findOne({userId:req.user._id})
+        var deliver = await Deliver.findOne({userId:req.user._id,vacancy:0})
         
-        var receive = await Receive.findOne({userId:req.user._id})
+        var receive = await Receive.findOne({userId:req.user._id,vacancy:0})
+
+        console.log('deliver',deliver,'receive',receive);
         
         var need = {};
         if(deliver && deliver.reqReceived.length > 0)
