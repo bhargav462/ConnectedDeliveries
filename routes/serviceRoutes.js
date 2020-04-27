@@ -286,7 +286,7 @@ router.post('/accepted',auth,async (req,res) => {
 
             var deliver = await Deliver.findOne({userId:req.user._id})
             
-            var receive = await Receive.findOne({username:req.body.name,location:deliver.location,from:deliver.from,to:deliver.to})
+            var receive = await Receive.findOne({username:req.body.username,location:deliver.location,from:deliver.from,to:deliver.to})
             console.log('receive',receive)
             receive.acceptedBy.username = req.user.username;
             receive.acceptedBy.userId = req.user._id;
