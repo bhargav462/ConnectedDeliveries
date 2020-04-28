@@ -214,7 +214,7 @@
           console.log('delAccepted',text.delAccepted)
           if(text.delAccepted){
             notificationString += `<tr><td colspan="2"><p id="delAcc" name="${text.delAccepted.username}">${text.delAccepted.username} accepted your delivery request</p><p id="time">Time : ${text.delAccepted.time}</p><table class="table table-dark table-hover">`;
-                <text class="delAccepted item"></text>.forEach(function(subelement){
+                text.delAccepted.itemList.forEach(function(subelement){
                     notificationString += `<tr><td>${subelement.name}</td><td>${subelement.qty}</td></tr>`;
                  })
             notificationString += `</table></td></tr>`;
