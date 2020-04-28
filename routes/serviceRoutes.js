@@ -37,6 +37,7 @@ router.post('/deliver',auth,(req,res) => {
             res.send(filteredDeliveries);
         })
     }).catch((err) => {
+        console.log(err);
         res.status(403).send()
     });
 })
