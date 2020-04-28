@@ -43,7 +43,18 @@ const deliverSchema = new Schema({
         userId:{
             type:ObjectId,
             unique:true
-        }
+        },
+        time:{
+            type:String
+        },
+        itemList:[{
+            name:{
+                type:String
+            },
+            qty:{
+                type:Number
+            }
+        }],
     }],
     acceptedBy:{
         username:{
@@ -53,7 +64,18 @@ const deliverSchema = new Schema({
         userId:{
             type:String,
             unique:true
-        }
+        },
+        time:{
+            type:String
+        },
+        itemList:[{
+            name:{
+                type:String
+            },
+            qty:{
+                type:Number
+            }
+        }],
     },
     rejectedBy:[{
         username:{

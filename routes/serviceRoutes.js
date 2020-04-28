@@ -96,12 +96,11 @@ router.post('/deliveryRequested',auth,async(req,res) => {
 
         console.log('result',result);
 
-        var delivery = new Deliver();
         var delivery = await Deliver.findOne({userId:req.user._id});
         console.log('felivery',delivery)
-        if(!delivery.reqSent){
-            delivery.reqSent = [];
-        }
+        // if(!delivery.reqSent){
+        //     delivery.reqSent = [];
+        // }
         console.log('reqSent',delivery.reqSent)
 
         delivery.reqSent = delivery.reqSent.concat({userId:result._id,username:result.username})
@@ -110,7 +109,7 @@ router.post('/deliveryRequested',auth,async(req,res) => {
 
         var receiver = await Receive.findOne({userId:result._id})
         console.log('receiver',receiver)
-        receiver.reqReceived = receiver.reqReceived.concat({userId:req.user._id,username:req.user.username});
+        receiver.reqReceived = receiver.reqReceived.concat({userId:req.user._id,username:req.user.username,time:delivery.time});
         await receiver.save();
 
 
@@ -137,7 +136,7 @@ router.post('/receiveRequested',auth,async(req,res) => {
         await receiver.save()
 
         var deliveryMan = await Deliver.findOne({userId:result._id})
-        deliveryMan.reqReceived = deliveryMan.reqReceived.concat({userId:req.user._id,username:req.user.username});
+        deliveryMan.reqReceived = deliveryMan.reqReceived.concat({userId:req.user._id,username:req.user.username,time:receiver.time,itemList:receiver.itemList});
         await deliveryMan.save();
 
         const payload  = JSON.stringify({title:'Connected Deliveries',name:req.user.username,mode:'delivery'});
@@ -168,6 +167,7 @@ router.post('/notification',auth,async (req,res) => {
 
         if(deliver && (deliver.acceptedBy.username || deliver.acceptedBy.userId)){
             need.delAccepted = deliver.acceptedBy
+
         }
 
         if(deliver && deliver.rejectedBy.length > 0){
@@ -179,6 +179,7 @@ router.post('/notification',auth,async (req,res) => {
         {
             console.log('receive',receive)
             need.receive = receive.reqReceived;
+            need.recItems = receive.itemList
             console.log('receive',receive.acceptedBy)
             
         }
@@ -190,6 +191,7 @@ router.post('/notification',auth,async (req,res) => {
         if(receive && (receive.acceptedBy.username || receive.acceptedBy.userId)){
             console.log('check')
             need.recAccepted = receive.acceptedBy
+            need.recItems = receive.itemList
         }
         
     
@@ -292,6 +294,7 @@ router.post('/accepted',auth,async (req,res) => {
             console.log('receive',receive)
             receive.acceptedBy.username = req.user.username;
             receive.acceptedBy.userId = req.user._id;
+            receive.acceptedBy.time = deliver.time
             receive.vacancy = 1;
             await receive.save();
 
@@ -306,15 +309,16 @@ router.post('/accepted',auth,async (req,res) => {
         }else{
 
             var deliver = await Deliver.findOne({username:req.body.username});
+            var receive = await Receive.findOne({username:req.user.username,location:deliver.location,from:deliver.from,to:deliver.to})
             console.log('deliver',deliver)
-            console.log('deliver.acceptedBy',deliver.acceptedBy)
+            // console.log('deliver.acceptedBy',deliver.acceptedBy)
             deliver.acceptedBy.username = req.user.username;
-            console.log('deliver.acceptedBy',deliver.acceptedBy)
+            // console.log('deliver.acceptedBy',deliver.acceptedBy)
             deliver.acceptedBy.userId = req.user._id;
+            deliver.acceptedBy.time = receive.time;
             deliver.vacancy = 1;
 
 
-            var receive = await Receive.findOne({username:req.user.username,location:deliver.location,from:deliver.from,to:deliver.to})
             console.log('receive',receive)
             receive.vacancy = 1;
             

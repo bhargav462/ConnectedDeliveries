@@ -10,6 +10,14 @@
   <link rel="stylesheet" href="/styles/header.css">
   <link rel="stylesheet" href="/styles/notification.css">
   <style>
+
+     #time{
+  color:#FEE715FF;
+  background-color: #101820FF;
+  padding: 5px;
+  width: fit-content;
+}
+
     #outerBody{
           background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
           background-repeat: no-repeat;
@@ -34,6 +42,8 @@
      margin-top: 5px;
    }
  }
+
+
 
     @media (min-width:767px){
   
@@ -164,16 +174,26 @@
      
         if(text.deliver)
           text.deliver.forEach((element) => {
-            notificationString += `<tr><td colspan="2"><p id="del" name="${element.username}">${element.username} sent a request to deliver his items</p></td>` +
-                          '<td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>'
+            notificationString += `<tr><td colspan="2"><p id="del" name="${element.username}">${element.username} sent a request to deliver the following items</p><p id="time">Delivery Time : ${element.time}</p><table class="table table-dark table-hover">`;
+                   
+                  element.itemList.forEach(function(subelement){
+                    notificationString += `<tr><td>${subelement.name}</td><td>${subelement.qty}</td></tr>`;
+                  })
+                             
+             notificationString  += `</table></td><td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>`
           })
 
                     console.log(text.receive)
 
         if(text.receive)
           text.receive.forEach((element) => {
-            notificationString += `<tr><td colspan="2"><p id="rec" name="${element.username}">${element.username} wants to deliver your items</p></td>` +
-                          '<td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>'
+            notificationString += `<tr><td colspan="2"><p id="rec" name="${element.username}">${element.username} wants to deliver your items</p><p id="time">Time : ${element.time}</p><table class="table table-dark table-hover">` ;
+
+                 text.recItems.forEach(function(subelement){
+                    notificationString += `<tr><td>${subelement.name}</td><td>${subelement.qty}</td></tr>`;
+                 })
+
+            notificationString += '</table></td><td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td></tr>'
           
           })
 
@@ -193,12 +213,22 @@
 
           console.log('delAccepted',text.delAccepted)
           if(text.delAccepted){
-            notificationString += `<tr><td colspan="2"><p id="delAcc" name="${text.delAccepted.username}">${text.delAccepted.username} accepted your delivery request</p></td></tr>`;
+            notificationString += `<tr><td colspan="2"><p id="delAcc" name="${text.delAccepted.username}">${text.delAccepted.username} accepted your delivery request</p><p id="time">Time : ${text.delAccepted.time}</p><table class="table table-dark table-hover">`;
+                <text class="delAccepted item"></text>.forEach(function(subelement){
+                    notificationString += `<tr><td>${subelement.name}</td><td>${subelement.qty}</td></tr>`;
+                 })
+            notificationString += `</table></td></tr>`;
           }
 
           console.log('recAccepted',text.recAccepted)
           if(text.recAccepted){
-            notificationString += `<tr><td colspan="2"><p id="recAcc" name="${text.recAccepted.username}">${text.recAccepted.username} accepted your request to deliver your items</p></td></tr>`;
+            notificationString += `<tr><td colspan="2"><p id="recAcc" name="${text.recAccepted.username}">${text.recAccepted.username} accepted your request to deliver your items</p><p id="time">Delivery Time : ${text.recAccepted.time}</p><table class="table table-dark table-hover">`;
+             
+             text.recItems.forEach(function(subelement){
+                    notificationString += `<tr><td>${subelement.name}</td><td>${subelement.qty}</td></tr>`;
+                 })
+
+            notificationString += `</table></td></tr>`;
           }
           
           notifBody.innerHTML = notificationString;

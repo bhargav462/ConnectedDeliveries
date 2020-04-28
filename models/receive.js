@@ -27,9 +27,14 @@ const receiveSchema = new Schema({
     charge:{
         type:Number
     },
-    itemList:{
-        type:Array
-    },
+    itemList:[{
+        name:{
+            type:String
+        },
+        qty:{
+            type:Number
+        }
+    }],
     reqSent:[{
         username:{
             type:String,
@@ -48,6 +53,8 @@ const receiveSchema = new Schema({
           userId:{
               type:ObjectId,
               unique:true
+          },time:{
+              type:String
           }
     }],
     rejectedBy:[{
@@ -68,6 +75,9 @@ const receiveSchema = new Schema({
           userId:{
               type:ObjectId,
               unique:true
+          },
+          time:{
+              type:String
           }
     },
     vacancy:{
