@@ -56,12 +56,10 @@ const deliverSchema = new Schema({
     }],
     acceptedBy:{
         username:{
-            type:String,
-            unique:true
+            type:String
         },
         userId:{
-            type:String,
-            unique:true
+            type:String
         },
         time:{
             type:String
@@ -77,12 +75,10 @@ const deliverSchema = new Schema({
     },
     rejectedBy:[{
         username:{
-            type:String,
-            unique:true
+            type:String
           },
           userId:{
-              type:ObjectId,
-              unique:true
+              type:ObjectId
           }
     }],
     vacancy:{

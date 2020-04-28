@@ -37,44 +37,36 @@ const receiveSchema = new Schema({
     }],
     reqSent:[{
         username:{
-            type:String,
-            unique:true
+            type:String
           },
           userId:{
-              type:ObjectId,
-              unique:true
+              type:ObjectId
           }
     }],
     reqReceived:[{
         username:{
-            type:String,
-            unique:true
+            type:String
           },
           userId:{
-              type:ObjectId,
-              unique:true
+              type:ObjectId
           },time:{
               type:String
           }
     }],
     rejectedBy:[{
         username:{
-            type:String,
-            unique:true
+            type:String
           },
           userId:{
-              type:ObjectId,
-              unique:true
+              type:ObjectId
           }
     }],
     acceptedBy:{
         username:{
-            type:String,
-            unique:true
+            type:String
           },
           userId:{
-              type:ObjectId,
-              unique:true
+              type:ObjectId
           },
           time:{
               type:String
