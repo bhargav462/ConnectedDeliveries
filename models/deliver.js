@@ -37,12 +37,10 @@ const deliverSchema = new Schema({
     }],
     reqReceived:[{
         username:{
-            type:String,
-            unique:true
+            type:String
         },
         userId:{
-            type:ObjectId,
-            unique:true
+            type:ObjectId
         },
         time:{
             type:String
