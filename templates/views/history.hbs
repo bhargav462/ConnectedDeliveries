@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connected Deliveries</title>
+      <link rel="icon" href="/images/circle-cropped.png" type="image/icon type">
+  <link rel='stylesheet' href='/styles/utils/bootstrap.css'>
+  <link rel="stylesheet" href="/styles/utils/googleFonts.css">
+  <link rel="stylesheet" href="/styles/header.css">
+  <link rel="stylesheet" href="/styles/notification.css">
+  <style>
+
+     #time{
+  color:#FEE715FF;
+  background-color: #101820FF;
+  padding: 5px;
+  width: fit-content;
+}
+
+    #outerBody{
+          background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
+          background-repeat: no-repeat;
+          background-size: cover;   
+      }
+
+      #mainBody{
+          padding:20px;
+          padding-top : 30px;
+      }
+
+      #notifications{
+        margin-right: 100px;
+      }
+
+      #notifMessage{
+        text-align: center;
+      }
+      
+      @media (max-width:360px){
+   #rejectButton{
+     margin-top: 5px;
+   }
+ }
+
+
+
+    @media (min-width:767px){
+  
+   #notification{
+  margin: 30px;
+  margin-bottom: 0em;
+}
+}
+
+ hr{
+   background-color: white;
+ }
+
+
+  </style>
+</head>
+
+<body class="dark">	
+  
+{{>header}}
+
+
+<script>
+      document.getElementById("history").className = "nav-item pl-4 pl-md-0 ml-0 ml-md-4 active"
+      
+          fetch('/login/check',{
+      method:'post',
+    }).then(function(response){
+      if(response.ok){
+        var username = document.getElementById("username");
+        var login = document.getElementById("login")
+
+         response.json().then(function(data){
+          if(data.user){
+            username.textContent = data.user;
+            username.href = "/profile";
+            login.textContent = "logout"
+            login.href = "#";
+
+            login.addEventListener("click",function(){
+            fetch('/logout',{
+              method:'post'
+            }).then(function(result){
+              if(!result.ok){
+                throw new Error()
+              }
+              window.location.href = "/login"
+            }).catch(function(err){
+              window.location.href = "/login" 
+            })
+          }); 
+          } 
+           
+        })
+      }else{
+        throw new Error();
+      }
+        
+    }).catch(function(err){
+       window.location.href = "/login";
+    }); 
+
+    
+    
+</script>
+
+<div id="outerBody">
+
+  <div id="mainBody">
+
+            <fieldset id="notification">
+
+              <p id="notifMessage" style="display: none;">You don't have any notifications</p>
+
+                  <br>
+                  <div id="notifInfo" class="table-responsive">
+                    <table class="table" id="notifTable" data-toggle="tooltip" data-placement="top" title="Click on the usernames to get the item details">
+                      {{!-- <thead>
+                        <tr>
+                          <th>username</th>
+                        </tr>
+                      </thead> --}}
+                      <tbody id="notifBody">
+                        {{!-- <tr>
+                          <td colspan="2"><p>bhargav sent a request to deliver his items</p>
+                            
+                          </td>
+                          <td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td>
+                        </tr>
+                        
+                        <tr>
+                          <td colspan="2"><p>Nakkina wants to deliver the items</p>
+                          </td>
+                          <td><button type="button" class="btn btn-success">Accept</button>&nbsp;<button id="rejectButton" type="button" class="btn btn-danger">Reject</button></td>
+                        </tr>
+                         --}}
+                      </tbody>
+                    </table>
+                    <hr>
+                  </div>
+                <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later.
+                 <a onclick="display()">Click here</a> to fill a new form</p>
+          </fieldset>
+
+  </div>
+
+</div>
+
+
+</body>
+
+<script src="./javascript/utils/jquery.js"></script>
+<script src='./javascript/utils/bootstrap.js'></script>
+</html>

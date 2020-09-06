@@ -28,12 +28,15 @@ const partialsPath = path.join(__dirname, '/templates/partials')
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }) )
 
 app.set('view engine','hbs');
 app.set('views',viewsPath);
 hbs.registerPartials(partialsPath);
 
 webpush.setVapidDetails('mailto:bhargavnakkina462@gmail.com',process.env.publicVapidKey,process.env.privateVapidKey);
+
+
 
 app.post('/subscribe',auth,async (req,res) => {
     const subscription = req.body;
