@@ -10,7 +10,24 @@
   <link rel="stylesheet" href="/styles/header.css">
   <link rel="stylesheet" href="/styles/utils/bootstrap-clockpicker.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+  <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+  <script type="text/javascript" src='https://developer.here.com/javascript/src/iframeheight.js'></script>
+ 
   <style>
+
+       #hereMaps{
+         margin:10vw;
+       }
+
+      #map{
+            width: 80vw;
+            height: 500px;
+        }
+
       #timepicker{
           color: black;
       }
@@ -177,7 +194,10 @@ legend
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
-                </select>    
+                </select>
+
+                <div id="fromAddress"></div>
+                 <input list="addressList" id="fromAddressSuggestionId" onkeyup="return callAutoCompleteListener(this, event);">
                 </div>
             </div>
             <div class="form-group row">
@@ -303,11 +323,17 @@ legend
 
 </div>
 
+          <div id="hereMaps">
+                <div id="map"></div>
+          </div>
+
 
 </body>
 <script src="/javascript/utils/jquery.js"></script>
 <script src="/javascript/utils/bootstrap-clockpicker.js"></script>
 <script src='/javascript/utils/bootstrap.js'></script>
+<script src="/javascript/hereMaps/receiveMap.js"></script>
+<script src="/javascript/hereMaps/addressAutoComplete.js"></script>
 <script>
 
     $('.clockpicker').clockpicker({
@@ -527,6 +553,16 @@ legend
      return minDate;
   }
 
+  var addressAutoComplete = new AddressAutoComplete();
+  addressAutoComplete.addAddressSuggestionReference(document.getElementById("fromAddress"),"fromAddressInput");
+  addressAutoComplete.init();
+
+  function callAutoCompleteListener(reference, event)
+  {
+    addressAutoComplete.autoCompleteListener(reference, event);
+  }
+
 </script>
+
 
 </html>

@@ -8,8 +8,39 @@
   <link rel='stylesheet' href='/styles/utils/bootstrap.css'>
   <link rel="stylesheet" href="/styles/utils/googleFonts.css">
   <link rel="stylesheet" href="/styles/header.css">
-    <link rel="stylesheet" href="/styles/utils/bootstrap-clockpicker.css">
+  <link rel="stylesheet" href="/styles/utils/bootstrap-clockpicker.css">
+  <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+  <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+  <script type="text/javascript" src='https://developer.here.com/javascript/src/iframeheight.js'></script>
+   
   <style>
+
+       #hereMaps{
+         margin:10vw;
+       }
+
+       #getRoute{
+         margin-top:10px;
+         margin-left: auto;
+         margin-right: auto;
+         display: flex;
+         text-align: center;
+       }
+
+        #map{
+            width: 80vw;
+            height: 500px;
+        }
+        body{
+            margin:0;
+            padding:0;
+        }
+        button{
+            margin-left: 40vw;
+        }
       
       #outerBody{
           background-image: linear-gradient(to bottom right,#00dbde,#fc00ff);
@@ -235,7 +266,12 @@ legend
                         
                       </tbody>
                     </table>
+
                   </div>
+                
+                
+                  
+
                 <p id="deliveryMessage" style="display: none; text-align: center;">Currently no deliveries are Available. Please try again later.
                  <a onclick="display()">Click here</a> to fill a new form</p>
           </fieldset>
@@ -243,6 +279,10 @@ legend
 
 </div>
 
+              <div id="hereMaps">
+                     <div id="map"></div>
+                    <button id="getRoute">Get Route</button>
+                </div>
 
 
 </body>
@@ -408,6 +448,8 @@ function fullDate(date)
       <script src="/javascript/utils/jquery.js"></script>
       <script src="/javascript/utils/bootstrap-clockpicker.js"></script>
       <script src='/javascript/utils/bootstrap.js'></script>
+      <script src="/javascript/hereMaps/findMapRoute.js"></script>
+      <script src="/javascript/hereMaps/map.js"></script>
 <script>
 
 
