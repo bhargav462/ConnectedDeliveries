@@ -19,6 +19,7 @@
 
 <script>
     var map;
+    var mapUrl = "https://maps.mapmyindia.com";
     var pth=window.location.href;
     var start_end_markersList = new Array();
     var full_path = pth.replace(pth.substr(pth.lastIndexOf('/') + 1), '');
@@ -52,7 +53,7 @@
 
             if (marker_name == 'source') {
                 var title = "Start Point";
-                icon_marker = L.icon({iconUrl: full_path + '/images/3.png', iconRetinaUrl: full_path +'/images/3.png', popupAnchor: [-3, -15]});
+                icon_marker = L.icon({iconUrl: mapUrl + '/images/3.png', iconRetinaUrl: mapUrl +'/images/3.png', popupAnchor: [-3, -15]});
             } else {
                 var title = "Destination Point";
             }
@@ -109,7 +110,7 @@
 
             }
 
-            if(!leaflet_group){$("#info").html("NO data");}
+            if(!leaflet_group){console.log('No routes data')}
             else
             {
                 console.log('leaflet_polyline',leaflet_polyline);
