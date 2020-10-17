@@ -38,23 +38,23 @@ var colors = {
     },
 };
 
-function addMarkersToMap(map,currentLatitude,currentLongitude) {
+function addMarkersToMap(map) {
 
-    startMarker = new H.map.Marker({lat:currentLatitude, lng:currentLongitude},{
-        volatility:true
-    });
+  startMarker = new H.map.Marker({lat:31.3959, lng:75.5359},{
+    volatility:true
+  });
 
-    startMarker.draggable = true;
+  startMarker.draggable = true;
 
-    endMarker = new H.map.Marker({lat:17, lng:81},{
-        volatility:true
-    });
+  map.addObject(startMarker)
+  
+  endMarker = new H.map.Marker({lat:17, lng:81},{
+      volatility:true
+  });
 
-    endMarker.draggable = true;
+  endMarker.draggable = true;
 
-    map.addObject(startMarker)
-
-    map.addObject(endMarker);
+  map.addObject(endMarker);
 
     map.addEventListener('dragstart', function(ev) {
         var target = ev.target,
@@ -99,7 +99,10 @@ var APIKEY = "hPdu5ukCOA7P4-9Ui1lHAQ0lc7CTt746JSPuCY0tBg8";
 var platform = new H.service.Platform({
   apikey: "hPdu5ukCOA7P4-9Ui1lHAQ0lc7CTt746JSPuCY0tBg8"
 });
+
 var defaultLayers = platform.createDefaultLayers();
+var geocoder = platform.getGeocodingService();
+var group = new H.map.Group();
 
 //Step 2: initialize a map - this map is centered over Alcatraz Island
 var routeInstructionsContainer = document.getElementById('panel');
@@ -126,16 +129,7 @@ Number.prototype.toMMSS = function () {
     return  Math.floor(this / 60)  +' minutes '+ (this % 60)  + ' seconds.';
   }
 
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(position => {
-        console.log(position.coords);
-        addMarkersToMap(map,position.coords.latitude,position.coords.longitude);
-    })
-  }else{
-        addMarkersToMap(map,16,80);
-        alert("Geolocation is not supported by the browser")
-  }
-
+  addMarkersToMap(map);
 
 function removeObjectByClass(id){
 

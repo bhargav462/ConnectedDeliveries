@@ -62,10 +62,10 @@ class FindRoute{
 
             for(var i = 0; i < polygonsArray.length; i++)
             {
-            if(polygonsArray[i].id === object.id){
-                route = polygonsArray[i].route;
-                break;
-            }
+              if(polygonsArray[i].id === object.id){
+                  route = polygonsArray[i].route;
+                  break;
+              }
             }
 
             if(route !== "")

@@ -189,26 +189,18 @@ legend
             <div class="form-group row">
                 <label for="From" class="col-sm-2 col-form-label">From</label>
                 <div class="col-md-4">
-                <select id="from" class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>
-
-                <div id="fromAddress"></div>
-                 <input list="addressList" id="fromAddressSuggestionId" onkeyup="return callAutoCompleteListener(this, event);">
+                  <div id="fromAddress">
+                    <input class="form-control" list="fromDatalist" id="fromAddressSuggestionId" onkeyup="return callFromAutoCompleteListener(this, event);">
+                  </div>
                 </div>
             </div>
+
             <div class="form-group row">
                 <label for="To" class="col-sm-2 col-form-label">To(current location)</label>
                 <div class="col-md-4">
-                <select id="to" class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                </select>    
+                  <div id="toAddress">
+                    <input class="form-control" list="toDatalist" id="toAddressSuggestionId" onkeyup="return callToAutoCompleteListener(this, event);">
+                  </div>
                 </div>
             </div>
 
@@ -406,21 +398,24 @@ legend
     }
 
     function display(){
-    console.log('display')
-    document.getElementById("receiveForm").style.display = "";
-    document.getElementById("deliveryMessage").style.display = "none"; 
-    document.getElementById("deliveryMan").style.display = "none";
-    itemList.innerHTML = "";
-  }
+      console.log('display')
+      document.getElementById("receiveForm").style.display = "";
+      document.getElementById("deliveryMessage").style.display = "none"; 
+      document.getElementById("deliveryMan").style.display = "none";
+      itemList.innerHTML = "";
+    }
   
       document.addEventListener("submit",function(e){
           e.preventDefault();
           var location = document.getElementById("location").value;
-          var from = document.getElementById("from").value;
-          var to = document.getElementById("to").value;
+          var from = document.getElementById("fromAddressSuggestionId").value;
+          var to = document.getElementById("toAddressSuggestionId").value;
           var date = document.getElementById("dates").value;
           var time = document.getElementById("time").value;
           var charge = document.getElementById("charge").value;
+          var startMarkerCoordinates = startMarker.getGeometry();
+          var endMarkerCoordinates = endMarker.getGeometry();
+
           var itemList = getItemsList();
 
           if(from === to)
@@ -442,7 +437,7 @@ legend
               headers: {
               'Content-Type': 'application/json'
               },
-              body:JSON.stringify({location,from,to,date,time,charge,itemList})
+              body:JSON.stringify({location,from,to,date,time,charge,itemList,startMarkerCoordinates,endMarkerCoordinates})
           }).then(function(response){
 
             document.getElementById("fromMessage").style.display = "none";
@@ -553,14 +548,22 @@ legend
      return minDate;
   }
 
-  var addressAutoComplete = new AddressAutoComplete();
-  addressAutoComplete.addAddressSuggestionReference(document.getElementById("fromAddress"),"fromAddressInput");
-  addressAutoComplete.init();
+  var fromAddressAutoComplete = new AddressAutoComplete();
+  fromAddressAutoComplete.init(document.getElementById("fromAddressSuggestionId"),startMarker,"fromDatalist");
 
-  function callAutoCompleteListener(reference, event)
+  function callFromAutoCompleteListener(reference, event)
   {
-    addressAutoComplete.autoCompleteListener(reference, event);
+    fromAddressAutoComplete.autoCompleteListener(reference, event);
   }
+
+  var toAddressAutoComplete = new AddressAutoComplete();
+  toAddressAutoComplete.init(document.getElementById("toAddressSuggestionId"),endMarker,"toDatalist");
+
+  function callToAutoCompleteListener(reference, event)
+  {
+    toAddressAutoComplete.autoCompleteListener(reference, event);
+  }
+
 
 </script>
 

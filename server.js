@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const webpush = require('web-push')
+const request = require('request');
 
 mongoose.Promise = global.Promise;
 
@@ -88,6 +89,10 @@ app.get('/notifications',auth,(req,res) => {
     console.log('notifications')
     res.render('notifications');
 })
+
+app.get('/demo',auth,(req,res) => {
+   res.render('demo');
+});
 
 app.get('*',(req,res) => {
     res.status(404).send();

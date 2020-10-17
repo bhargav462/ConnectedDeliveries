@@ -27,6 +27,12 @@ const receiveSchema = new Schema({
     charge:{
         type:Number
     },
+    fromCoordinates:{
+        type:Object
+    },
+    toCoordinates:{
+        type:Object
+    },
     itemList:[{
         name:{
             type:String

@@ -1,15 +1,13 @@
-
-var group = new H.map.Group();
-
-map.addObject(group);
-
-
 var bubble;
+
 group.addEventListener('tap', function (evt) {
     map.setCenter(evt.target.getGeometry());
+    console.log('check',evt.target.getGeometry(),evt.target.getData());
     openBubble(
         evt.target.getGeometry(), evt.target.getData());
 }, false);
+
+map.addObject(group);
 
 function openBubble(position, text){
     if(!bubble){
@@ -25,46 +23,55 @@ function openBubble(position, text){
     }
 }
 
-class AddressAutoComplete{
+// class AddressAutoComplete
+function AddressAutoComplete(){
 
-    addAddressSuggestionReference(reference,id)
-    {
-        this.addressSuggestion = reference;
-        this.addressSuggestionId = id;
+    var AUTOCOMPLETION_URL;
+    var ajaxRequest;
+    var query;
+    var addressSuggestion;
+    var marker;
+    var datalistId;
+
+    function init(reference,markerReference,dId){
+
+        addressSuggestion = reference;
+        marker = markerReference;
+        datalistId = dId;
+
+        AUTOCOMPLETION_URL = 'https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json';
+        ajaxRequest = new XMLHttpRequest();
+        query = '';
+
+        // console.log('ajaxRequest',ajaxRequest)
+
+        ajaxRequest.addEventListener("load", onAutoCompleteSuccess);
+        ajaxRequest.addEventListener("error", onAutoCompleteFailed);
+        ajaxRequest.responseType = "json";
     }
 
-    init(){
-        this.AUTOCOMPLETION_URL = 'https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json';
-        this.ajaxRequest = new XMLHttpRequest();
-        this.query = '';
-
-        this.ajaxRequest.addEventListener("load", this.onAutoCompleteSuccess);
-        this.ajaxRequest.addEventListener("error", this.onAutoCompleteFailed);
-        this.ajaxRequest.responseType = "json";
-    }
-
-    onAutoCompleteSuccess() {
+    function onAutoCompleteSuccess() {
         /*
          * The styling of the suggestions response on the map is entirely under the developer's control.
          * A representitive styling can be found the full JS + HTML code of this example
          * in the functions below:
          */
-        addressAutoComplete.clearOldSuggestions();
-        addressAutoComplete.addSuggestionsToPanel(this.response);  // In this context, 'this' means the XMLHttpRequest itself.
-        addressAutoComplete.addSuggestionsToMap(this.response);
+        clearOldSuggestions();
+        addSuggestionsToPanel(this.response);  // In this context, 'this' means the XMLHttpRequest itself.
+        addSuggestionsToMap(this.response);
     }
     
     /**
      *  This is the event listener which processes the XMLHttpRequest response returned from the server.
      */
-    onAutoCompleteFailed() {
+    function onAutoCompleteFailed() {
         alert('Ooops!');
     }
 
      /**
      * Removes all H.map.Marker points from the map and adds closes the info bubble
      */
-    clearOldSuggestions(){
+    function clearOldSuggestions(){
         group.removeAll();
         if(bubble){
             bubble.close();
@@ -86,34 +93,27 @@ class AddressAutoComplete{
  *
  * @param {Object} response
  */
-   addSuggestionsToMap(response){
+   function addSuggestionsToMap(response){
     /**
      * This function will be called once the Geocoder REST API provides a response
      * @param  {Object} result          A JSONP object representing the  location(s) found.
      */
     var onGeocodeSuccess = function (result) {
 
-            var marker,
-                locations = result.Response.View[0].Result,
+            var locations = result.Response.View[0].Result,
                 i;
+                
 
 
             // Add a marker for each location found
             for (i = 0; i < locations.length; i++) {
-                marker = new H.map.Marker({
-                    lat : locations[i].Location.DisplayPosition.Latitude,
-                    lng : locations[i].Location.DisplayPosition.Longitude
-                });
-                marker.setData(locations[i].Location.Address.Label);
-                group.addObject(marker);
+                    marker.setGeometry({lat: locations[i].Location.DisplayPosition.Latitude,
+                        lng : locations[i].Location.DisplayPosition.Longitude
+                    })
+                    marker.setData(locations[i].Location.Address.Label);
+                    // group.addObject(marker);    
             }
 
-            map.getViewModel().setLookAtData({
-                bounds: group.getBoundingBox()
-            });
-            if(group.getObjects().length < 2){
-                map.setZoom(15);
-            }
         },
         /**
          * This function will be called if a communication error occurs during the JSON-P request
@@ -152,8 +152,6 @@ class AddressAutoComplete{
         if(index !== 0)
         return;
         geocodeByLocationId(item.locationId);
-
-        
       });
     }
 
@@ -162,27 +160,27 @@ class AddressAutoComplete{
      *
      * @param {Object} response
      */
-    addSuggestionsToPanel(response){
+    function addSuggestionsToPanel(response){
 
         // var addressSuggestion = document.getElementById("addressSuggestion");
 
         // console.log('beforeCheck',addressSuggestion.innerHTML);
 
-        var addressDataListContent = `<datalist id="addressList">`;
+        var addressDataListContent = `<datalist id="${datalistId}">`;
         
         response.suggestions.forEach(function(result){
             addressDataListContent += `<option data-value="${result.label}">${result.label}`;
         })
         addressDataListContent += '</datalist>';
 
-        this.addressSuggestion.innerHTML = addressDataListContent;
+        addressSuggestion.innerHTML = addressDataListContent;
 
         // console.log('check',addressSuggestion.innerHTML);
     }
 
-    autoCompleteListener(textBox, event) {
+    function autoCompleteListener(textBox, event) {
 
-        if (this.query != textBox.value){
+        if (query != textBox.value){
             if (textBox.value.length >= 1){
     
                 /**
@@ -197,13 +195,17 @@ class AddressAutoComplete{
                     '&maxresults=5' +  // The upper limit the for number of suggestions to be included
                     // in the response.  Default is set to 5.
                     '&apikey=' + APIKEY;
-                this.ajaxRequest.open('GET', this.AUTOCOMPLETION_URL + params );
-                this.ajaxRequest.send();
+                ajaxRequest.open('GET', AUTOCOMPLETION_URL + params );
+                ajaxRequest.send();
             }
         }
-        this.query = textBox.value;
+        query = textBox.value;
     }
 
+    return Object.freeze({
+        init,
+        autoCompleteListener
+    })
 
 }
 

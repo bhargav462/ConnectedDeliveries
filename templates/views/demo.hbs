@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://www.mapmyindia.com/images/favicon.ico" type="image/x-icon">
+    <title>Map My India</title>
+    <style>
+       #map{
+           height: 80vh;
+           width: 100vw;
+       }
+    </style>
+</head>
+<script src="https://apis.mapmyindia.com/advancedmaps/v1/935k6sd99ncomdm1zn1bziz6ydzr84bs/map_load?v=1.2"></script>
+<body>
+    <div id="map"></div>
+</body>
+
+<script>
+    var map;
+    var pth=window.location.href;
+    var start_end_markersList = new Array();
+    var full_path = pth.replace(pth.substr(pth.lastIndexOf('/') + 1), '');
+    var sourceCoordinates = {
+        lat:25,
+        lng:82
+    };
+    var destinyCoordinates = {
+        lat:17,
+        lng:81
+    };
+    var routeApiUrl = 'https://apis.mapmyindia.com/advancedmaps/v1/qqymz4ot4hy44z1xfb2oz1ipuheuhjsj/route_adv/driving/';
+    var geometry;
+    var leaflet_group=[],leaflet_polyline='',advise_arr='',adv_marker='';
+
+
+    try{
+        map=new MapmyIndia.Map('map',{zoomControl: true,hybrid:true,traffic:true });
+    }catch(e){
+        alert('Please check map key');
+    }
+
+    get_route_result();
+
+    function show_markers(marker_name, points)
+        {
+            var show_marker;
+            var pos = new L.LatLng(points.lat, points.lng);
+            var title;
+            var icon_marker='';
+
+            if (marker_name == 'source') {
+                var title = "Start Point";
+                icon_marker = L.icon({iconUrl: full_path + '/images/3.png', iconRetinaUrl: full_path +'/images/3.png', popupAnchor: [-3, -15]});
+            } else {
+                var title = "Destination Point";
+            }
+            /****marker display, for more about marker, please refer our marker documentation****/
+            if (icon_marker!='')
+                show_marker = new L.marker(pos, { draggable: 'true',icon:icon_marker, title: title}).addTo(map);
+            else
+                show_marker = new L.marker(pos, { draggable: 'true', title: title}).addTo(map);
+
+            show_marker.bindPopup(title, {closeButton: true, autopan: true, zoomAnimation: true}).openPopup();
+            start_end_markersList.push(show_marker);
+
+            show_marker.on('dragend', function (event) {
+                var marker = event.target;
+                var position = marker.getLatLng();
+                console.log(position);
+                console.log(marker.options.title        );
+                // document.getElementById(marker_name).value = position.lat + "," + position.lng;
+                // get_route_result();
+            });
+        }
+
+        function get_route_result()
+        {
+           show_markers("source",sourceCoordinates);
+           show_markers("destiny",destinyCoordinates);
+           var finalURL = 'https://cors-anywhere.herokuapp.com/' + routeApiUrl +  `${sourceCoordinates.lat},${sourceCoordinates.lng};${destinyCoordinates.lat},${destinyCoordinates.lng}?`;
+
+           console.log(finalURL);
+
+           finalURL = `https://cors-anywhere.herokuapp.com/https://apis.mapmyindia.com/advancedmaps/v1/qqymz4ot4hy44z1xfb2oz1ipuheuhjsj/route_adv/driving/${sourceCoordinates.lng},${sourceCoordinates.lat};${destinyCoordinates.lng},${destinyCoordinates.lat}?alternatives=true&rtype=0&geometries=polyline&overview=full&exclude=&steps=true&region=ind`;
+            
+           fetch(finalURL).then(res => {
+               if(res.ok)
+               {
+                   return res.json();
+               }
+               return res.json();
+           }).then(result => {
+               console.log('result',result);
+               route_api_result(result);
+           })
+        }
+
+        function route_api_result(data)
+        {
+           for(i = 0; i < data.routes.length; i++)
+           {
+             var geometry=decode(data.routes[i].geometry);
+             
+             var color="#016f99";
+             if(i>0) color="#a9b6c4";
+             leaflet_group[i]=new L.Polyline(geometry, {weight: 7, opacity: 1, color: color, smoothFactor: 1});
+
+            }
+
+            if(!leaflet_group){$("#info").html("NO data");}
+            else
+            {
+                console.log('leaflet_polyline',leaflet_polyline);
+                leaflet_polyline=new L.featureGroup(leaflet_group);
+                map.addLayer(leaflet_polyline);
+                leaflet_group[0].bringToFront();
+                // table+="</tr><tr><td colspan='"+data.routes.length+"'>"+advise_dv+"</td></tr></table>"
+                // document.getElementById('info').innerHTML = table;
+            }
+        }
+
+        function decode(encoded) 
+        {
+            var points = [];
+            var index = 0, len = encoded.length;
+            var lat = 0, lng = 0;
+            while (index < len) {
+                var b, shift = 0, result = 0;
+                do {
+
+                    b = encoded.charAt(index++).charCodeAt(0) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+
+
+                var dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lat += dlat;
+                shift = 0;
+                result = 0;
+                do {
+                    b = encoded.charAt(index++).charCodeAt(0) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                var dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lng += dlng;
+
+                points.push([lat / 1E5, lng / 1E5])
+
+
+            }
+            return points
+        } 
+
+
+</script>
+
+</html>

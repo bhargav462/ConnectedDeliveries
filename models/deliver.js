@@ -27,6 +27,12 @@ const deliverSchema = new Schema({
     charge:{
         type:Number
     },
+    fromCoordinates:{
+        type:Object
+    },
+    toCoordinates:{
+        type:Object
+    },
     reqSent:[{
         username:{
           type:String

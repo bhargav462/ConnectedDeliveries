@@ -8,9 +8,12 @@ const webpush = require('web-push')
 const router = express.Router();
 
 router.post('/deliver',auth,(req,res) => {
-    console.log('deliver')
+    console.log('deliver',req.body)
     
     var newService = _.pick(req.body,['location','from','to','date','time','charge'])
+
+    newService.fromCoordinates = req.body.startMarkerCoordinates;
+    newService.toCoordinates = req.body.endMarkerCoordinates;
     newService.userId = req.user._id;
     newService.username = req.user.username;
     var service = new Deliver(newService)
@@ -20,11 +23,13 @@ router.post('/deliver',auth,(req,res) => {
 
         console.log('result',result);
         
-        Receive.find({location:result.location,from:result.from,to:result.to,date:result.date,vacancy:0}).then(async (deliveries) => {
+        Receive.find().then(async (deliveries) => {
 
             console.log('deliveriesprevious',deliveries);
 
             var filteredDeliveries = await deliveries.filter((element) => {
+                console.log('element',element.userId);
+                console.log('user',req.user._id);
                 if(element.userId.toString() !== req.user._id.toString())
                 {
                     console.log(element.userId,'inside',req.user._id);
@@ -34,7 +39,7 @@ router.post('/deliver',auth,(req,res) => {
             })
 
             console.log('deliveries',filteredDeliveries);
-            res.send(filteredDeliveries);
+            res.send(deliveries);
         })
     }).catch((err) => {
         console.log(err);
@@ -46,13 +51,18 @@ router.post('/receive',auth,(req,res) => {
     console.log('receive',req.body)
     
     var newService = _.pick(req.body,['location','from','to','date','time','charge','itemList'])
+
     newService.userId = req.user._id;
     newService.mode = "receive";
+    newService.fromCoordinates = req.body.startMarkerCoordinates;
+    newService.toCoordinates = req.body.endMarkerCoordinates;
     newService.username = req.user.username;
+
     var service = new Receive(newService)
         console.log(service)
 
     service.save().then((result) => {
+        console.log('result',result);
         
         Deliver.find({location:result.location,from:result.from,to:result.to,date:result.date,vacancy:0}).then((deliveryMan) => {
 

@@ -38,23 +38,24 @@ var colors = {
     },
 };
 
-function addMarkersToMap(map,currentLatitude,currentLongitude) {
+function addMarkersToMap(map) {
 
-    startMarker = new H.map.Marker({lat:currentLatitude, lng:currentLongitude},{
-        volatility:true
+    startMarker = new H.map.Marker({lat:18, lng:80},{
+      volatility:true
     });
 
     startMarker.draggable = true;
-
+    map.addObject(startMarker)
+    group.addObject(startMarker);
+    
     endMarker = new H.map.Marker({lat:17, lng:81},{
         volatility:true
     });
 
     endMarker.draggable = true;
 
-    map.addObject(startMarker)
-
     map.addObject(endMarker);
+    group.addObject(endMarker);
 
     map.addEventListener('dragstart', function(ev) {
         var target = ev.target,
@@ -119,20 +120,25 @@ var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
 // Step 4: Create the default UI:
 var ui = H.ui.UI.createDefault(map, defaultLayers, 'en-US');
+var group = new H.map.Group();
+var geocoder = platform.getGeocodingService();
+
+addMarkersToMap(map);
+
 
 Number.prototype.toMMSS = function () {
     return  Math.floor(this / 60)  +' minutes '+ (this % 60)  + ' seconds.';
   }
 
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(position => {
-        console.log(position.coords);
-        addMarkersToMap(map,position.coords.latitude,position.coords.longitude);
-    })
-  }else{
-        addMarkersToMap(map,16,80);
-        alert("Geolocation is not supported by the browser")
-  }
+  // if(navigator.geolocation){
+  //   navigator.geolocation.getCurrentPosition(position => {
+  //       console.log(position.coords);
+  //       addMarkersToMap(map,position.coords.latitude,position.coords.longitude);
+  //   })
+  // }else{
+  //       addMarkersToMap(map,16,80);
+  //       alert("Geolocation is not supported by the browser")
+  // }
 
 
 function removeObjectByClass(id){
@@ -146,9 +152,3 @@ function removeObjectByClass(id){
       }
       polygonsArray = [];
 }
-
-
-
-
-
-
