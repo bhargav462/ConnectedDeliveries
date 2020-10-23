@@ -22,7 +22,7 @@
     var mapUrl = "https://maps.mapmyindia.com";
     var pth=window.location.href;
     var start_end_markersList = new Array();
-    var full_path = pth.replace(pth.substr(pth.lastIndexOf('/') + 1), '');
+   // var full_path = pth.replace(pth.substr(pth.lastIndexOf('/') + 1), '');
     var sourceCoordinates = {
         lat:25,
         lng:82
@@ -44,7 +44,7 @@
 
     get_route_result();
 
-    function show_markers(marker_name, points)
+     function show_markers(marker_name, points)
         {
             var show_marker;
             var pos = new L.LatLng(points.lat, points.lng);

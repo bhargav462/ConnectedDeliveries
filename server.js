@@ -26,8 +26,6 @@ const publicDirectoryPath = path.join(__dirname,'/public');
 const viewsPath = path.join(__dirname,'/templates/views');
 const partialsPath = path.join(__dirname, '/templates/partials')
 
-mongoose.Promise = global.Promise;
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }) )
 
