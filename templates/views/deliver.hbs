@@ -167,7 +167,7 @@ legend
                 <label for="From" class="col-sm-2 col-form-label">From(visiting place)</label>
                 <div class="col-md-4">
                   <div id="fromAddress">
-                    <input list="fromDatalist" class="form-control" id="fromAddressSuggestionId" onkeyup="return callFromAutoCompleteListener(this, event);">
+                    <input list="fromDatalist" class="form-control" id="fromAddress" onkeyup="return callFromAutoCompleteListener(this, event);">
                   </div>    
                 </div>
 
@@ -179,7 +179,7 @@ legend
                 <label for="To" class="col-sm-2 col-form-label">To(current location)</label>
                 <div class="col-md-4">
                   <div id="toAddress">
-                    <input list="toDatalist" class="form-control" id="toAddressSuggestionId" onkeyup="return callToAutoCompleteListener(this, event);">
+                    <input list="toDatalist" class="form-control" id="toAddress" onkeyup="return callToAutoCompleteListener(this, event);">
                   </div>    
                 </div>
 
@@ -275,17 +275,25 @@ legend
 
 </div>
 
-              <div id="hereMaps">
-                     <div id="map"></div>
-                    <button id="getRoute">Get Route</button>
-                </div>
+    <div id="hereMaps">
+        {{!-- <div id="delete">
+            <input list="fromDatalist" id="fromAddress" autocomplete="off" disabled>
+        </div> --}}
+        {{!-- <div id="delete">
+            <input list="toDatalist" id="toAddress" autocomplete="off" disabled>
+        </div> --}}
+        <div id="map"></div>
+        <div id="delete">
+            <button onclick="return findNearByMarkers()">submit</button>
+        </div>
+    </div>
 
 
 </body>
 
-<script src="/javascript/hereMaps/findMapRoute.js"></script>
-<script src="/javascript/hereMaps/map.js"></script>
-<script src="/javascript/hereMaps/addressAutoComplete.js"></script>
+<script src="/javascript/mapMyIndia/mapInit.js"></script>
+<script src="/javascript/mapMyIndia/mapRouting.js"></script>
+<script src="/javascript/mapMyIndia/addressAutoComplete.js"></script>
 
 <script>
 
@@ -461,21 +469,21 @@ function fullDate(date)
 		          donetext: 'Done'
         });
 
-  var fromAddressAutoComplete = new AddressAutoComplete();
-  fromAddressAutoComplete.init(document.getElementById("fromAddressSuggestionId"),startMarker,"fromDatalist");
+  //var fromAddressAutoComplete = new AddressAutoComplete();
+  //fromAddressAutoComplete.init(document.getElementById("fromAddressSuggestionId"),startMarker,"fromDatalist");
 
-  function callFromAutoCompleteListener(reference, event)
-  {
-    fromAddressAutoComplete.autoCompleteListener(reference, event);
-  }
+  //function callFromAutoCompleteListener(reference, event)
+  //{
+  //  fromAddressAutoComplete.autoCompleteListener(reference, event);
+  //}
 
-  var toAddressAutoComplete = new AddressAutoComplete();
-  toAddressAutoComplete.init(document.getElementById("toAddressSuggestionId"),endMarker,"toDatalist");
+  //var toAddressAutoComplete = new AddressAutoComplete();
+  //toAddressAutoComplete.init(document.getElementById("toAddressSuggestionId"),endMarker,"toDatalist");
 
-  function callToAutoCompleteListener(reference, event)
-  {
-    toAddressAutoComplete.autoCompleteListener(reference, event);
-  }
+  //function callToAutoCompleteListener(reference, event)
+  //{
+  //  toAddressAutoComplete.autoCompleteListener(reference, event);
+  //}
 
 </script>
 
